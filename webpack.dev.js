@@ -27,6 +27,7 @@ module.exports = merge(common, {
         { from: /^\/profile$/, to: "/community.html" },
         { from: /^\/users\/.*$/, to: "/community.html" },
         { from: /^\/songs\/.*$/, to: "/community.html" },
+        { from: /^\/trial\/.*$/, to: "/trial.html" },
         { from: /^\//, to: "/index.html" },
       ],
     },

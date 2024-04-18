@@ -5,6 +5,7 @@
   "scripts": {
     "start": "webpack serve --config webpack.dev.js",
     "build": "webpack --config webpack.prod.js",
+    "buildev": "webpack --config webpack.dev.js",
     "serve": "npx http-server dist",
     "test": "jest",
     "format": "prettier --write src",

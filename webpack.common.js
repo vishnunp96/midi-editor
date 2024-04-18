@@ -10,6 +10,7 @@ module.exports = {
     browserMain: "./src/main/index.tsx",
     browserLanding: "./src/landing/index.ts",
     browserCommunity: "./src/community/index.tsx",
+    browserTrial: "./src/trial/index.ts"
   },
   output: {
     filename: "[name]-[chunkhash].js",
@@ -42,6 +43,12 @@ module.exports = {
       filename: "index.html",
       chunks: ["browserLanding"],
       template: path.join(__dirname, "public", "index.html"),
+    }),
+    new HtmlWebpackPlugin({
+      inject: true,
+      filename: "trial.html",
+      chunks: ["browserTrial"],
+      template: path.join(__dirname, "public", "trial", "trial.html"),
     }),
     new HtmlWebpackPlugin({
       inject: true,
