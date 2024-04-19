@@ -32,6 +32,11 @@ window.addEventListener("DOMContentLoaded", (e) => {
     slidingMenu.classList.replace('hidden', 'out');
     slidingMenu.classList.toggle('in');
     slidingMenu.classList.toggle('out');
-
   });
+
+  const volumeButton = document.querySelector(".speaker") as HTMLAnchorElement;
+  volumeButton.addEventListener('click', function() {
+    volumeButton.classList.toggle('mute')
+  })
+
 })
