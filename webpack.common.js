@@ -48,7 +48,7 @@ module.exports = {
       inject: true,
       filename: "trial.html",
       chunks: ["browserTrial"],
-      template: path.join(__dirname, "public", "trial", "trial.html"),
+      template: path.join(__dirname, "public", "trial.html"),
     }),
     new HtmlWebpackPlugin({
       inject: true,
