@@ -3,7 +3,7 @@ import OpenInNewIcon from "mdi-react/OpenInNewIcon"
 import { observer } from "mobx-react-lite"
 import { FC, useCallback, useState } from "react"
 import { useLocalization } from "../../../common/localize/useLocalization"
-import { useAsyncEffect } from "../../../community/hooks/useAsyncEffect"
+import { useAsyncEffect } from "../../hooks/useAsyncEffect"
 import { Alert } from "../../../components/Alert"
 import { Button, PrimaryButton } from "../../../components/Button"
 import {
