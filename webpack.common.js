@@ -8,9 +8,9 @@ module.exports = {
   context: __dirname,
   entry: {
     browserMain: "./src/main/index.tsx",
-    browserLanding: "./src/landing/index.ts",
-    browserCommunity: "./src/community/index.tsx",
-    browserTrial: "./src/trial/index.ts"
+    // browserLanding: "./src/landing/index.ts",
+    // browserCommunity: "./src/community/index.tsx",
+    // browserTrial: "./src/trial/index.ts"
   },
   output: {
     filename: "[name]-[chunkhash].js",
@@ -37,24 +37,6 @@ module.exports = {
       filename: "edit.html",
       chunks: ["browserMain"],
       template: path.join(__dirname, "public", "edit.html"),
-    }),
-    new HtmlWebpackPlugin({
-      inject: true,
-      filename: "index.html",
-      chunks: ["browserLanding"],
-      template: path.join(__dirname, "public", "index.html"),
-    }),
-    new HtmlWebpackPlugin({
-      inject: true,
-      filename: "trial.html",
-      chunks: ["browserTrial"],
-      template: path.join(__dirname, "public", "trial.html"),
-    }),
-    new HtmlWebpackPlugin({
-      inject: true,
-      filename: "community.html",
-      chunks: ["browserCommunity"],
-      template: path.join(__dirname, "public", "community.html"),
     }),
     new WorkboxPlugin.GenerateSW({
       maximumFileSizeToCacheInBytes: 50000000,
