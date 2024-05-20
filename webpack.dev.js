@@ -31,7 +31,7 @@ module.exports = merge(common, {
         { from: /^\//, to: "/edit.html" },
       ],
     },
-    open: true,
+    open: false,
   },
   module: {
     rules: [
