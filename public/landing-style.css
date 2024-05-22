@@ -1,0 +1,148 @@
+:root {
+    --themeColor: #5a4edf;
+    --themeColor2: #4c41cc;
+}
+
+body {
+    margin: 0;
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, Helvetica Neue,
+        sans-serif;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    background: hsl(245deg 5% 16%);
+    color: white;
+
+    text-align: center;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    /*align-items: center;*/
+    overflow: hidden;
+}
+
+.background-content {
+    background-image: url('landing-bg-wallpaper.jpg');
+    background-size: auto;
+    background-position: center;
+    width: 100%;
+    height: 100%;
+}
+
+.gradient-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    background: radial-gradient(transparent 0%, black 70%);
+}
+
+.all-content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /*background: radial-gradient(ellipse at center, rgba(0,0,0,0) 0%, rgba(0,0,0,1.0) 100%);*/
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    z-index: 1;
+}
+
+header {
+    width: 100%;
+    max-height: 6rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+}
+
+footer {
+    padding: 0.5rem 0;
+    max-height: 8rem;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+
+
+.upload-option {
+    /*cursor: pointer;*/
+    position: relative;
+    width: 15%;
+    left: 42.5%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    /*padding: 2rem 0;*/
+    top: 2rem;
+    height: 60%;
+
+
+
+
+}
+
+.upload-option img {
+    width: 40px;
+}
+
+.upload-option input {
+    opacity: 0;
+    cursor: pointer;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+}
+
+.upload-option .upload-text {
+    margin: 0 5px;
+    min-width: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.upload-text h2 {
+    position: relative;
+    top: -5%;
+    margin: 0;
+    font-size: 1rem;
+}
+
+.upload-text p {
+    margin: 0;
+    font-size: 0.7rem;
+    font-weight: lighter;
+    text-decoration-line: underline;
+}
+
+.img-icons {
+    padding: 1rem;
+    margin: 0 0.5rem 0;
+}
+
+img {
+    height: 4rem;
+}
+
+.main-content {
+    flex-grow: 1;
+}
+
+.tooltip-custom {
+    font-family: "Times New Roman", serif;
+    /*font-style: italic;*/
+}

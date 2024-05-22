@@ -1,0 +1,55 @@
+.speaker {
+    max-height: 6rem;
+    max-width: 6rem;
+    padding: 1rem;
+    margin: 1rem 0.5rem 0;
+    position: relative;
+    cursor: pointer;
+}
+
+.speaker > img {
+    height: 100%;
+    width: 100%;
+}
+
+.speaker > span {
+    z-index: 1;
+    display: block;
+    width: 100%;
+    box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.3);
+    border-radius: 3px;
+    height: 8%;
+    background: #fff;
+    transition: all .3s;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: rotate(45deg);
+    animation: shrinkWidth 0.7s forwards;
+}
+
+.speaker.mute > span {
+    animation: growWidth 0.7s forwards;
+}
+
+@keyframes growWidth {
+    from {
+        width: 0;
+        top: 0;
+    }
+    to {
+        width: 100%;
+        top: 50%;
+    }
+}
+
+@keyframes shrinkWidth {
+    from {
+        width: 100%;
+        top: 50%;
+    }
+    to {
+        width: 0;
+        top: 0;
+    }
+}

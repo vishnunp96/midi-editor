@@ -22,12 +22,8 @@ module.exports = merge(common, {
     },
     historyApiFallback: {
       rewrites: [
-        // { from: /^\/edit$/, to: "/edit.html" },
-        // { from: /^\/home$/, to: "/community.html" },
-        // { from: /^\/profile$/, to: "/community.html" },
-        // { from: /^\/users\/.*$/, to: "/community.html" },
-        // { from: /^\/songs\/.*$/, to: "/community.html" },
-        { from: /^\//, to: "/edit.html" },
+        { from: /^\/edit$/, to: "/edit.html" },
+        { from: /^\//, to: "/index.html" }
       ],
     },
     open: false,
