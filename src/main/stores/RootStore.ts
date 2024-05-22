@@ -13,7 +13,10 @@ import { ICloudSongRepository } from "../../repositories/ICloudSongRepository"
 import { IUserRepository } from "../../repositories/IUserRepository"
 import { UserRepository } from "../../repositories/UserRepository"
 import { setSong } from "../actions"
-import { loadSongFromExternalMidiFile } from "../actions/cloudSong"
+import {
+  loadMidiFileDirectly,
+  loadSongFromExternalMidiFile
+} from "../actions/cloudSong"
 import { pushHistory } from "../actions/history"
 import { GroupOutput } from "../services/GroupOutput"
 import { MIDIInput, previewMidiInput } from "../services/MIDIInput"
@@ -170,7 +173,9 @@ export default class RootStore {
 
     if (openParam) {
       this.initializationPhase = "loadExternalMidi"
-      const song = await loadSongFromExternalMidiFile(this)(openParam)
+      // const song = await loadSongFromExternalMidiFile(this)(openParam)
+      console.log("loading midi file from: "+openParam)
+      const song = await loadMidiFileDirectly()(openParam)
       setSong(this)(song)
     }
   }
