@@ -70,24 +70,7 @@ export const loadSongFromExternalMidiFile =
     return song
   }
 
-export const loadMidiFileDirectly =
-  () =>
-    async (midiFileUrl: string) => {
-      console.log("midifileurl to ping:" + midiFileUrl)
-      const response = await fetch(midiFileUrl);
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
 
-      const data = await response.arrayBuffer();
-      const uint8Array = new Uint8Array(data);
-      console.log('MIDI file byte stream length:', uint8Array.length);
-
-      const song = songFromMidi(uint8Array)
-      song.name = basename(midiFileUrl) ?? ""
-      song.isSaved = true
-      return song
-    }
 
 export const publishSong =
   ({ cloudSongRepository, cloudSongDataRepository }: RootStore) =>
@@ -108,3 +91,22 @@ export const unpublishSong =
     await cloudSongDataRepository.unpublish(song.cloudSongDataId)
     await cloudSongRepository.unpublish(song.cloudSongId)
   }
+
+export const loadMidiFileDirectly =
+  () =>
+    async (midiFileUrl: string) => {
+      console.log("midifileurl to ping:" + midiFileUrl)
+      const response = await fetch(midiFileUrl);
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const data = await response.arrayBuffer();
+      const uint8Array = new Uint8Array(data);
+      console.log('MIDI file byte stream length:', uint8Array.length);
+
+      const song = songFromMidi(uint8Array)
+      song.name = basename(midiFileUrl) ?? ""
+      song.isSaved = true
+      return song
+    }
