@@ -8,10 +8,7 @@ module.exports = {
   context: __dirname,
   entry: {
     browserMain: "./src/main/index.tsx",
-    browserLanding: "./src/trial/index.ts"
-    // browserLanding: "./src/landing/index.ts",
-    // browserCommunity: "./src/community/index.tsx",
-    // browserTrial: "./src/trial/index.ts"
+    browserLanding: "./src/landing/index.ts"
   },
   output: {
     filename: "[name]-[chunkhash].js",
