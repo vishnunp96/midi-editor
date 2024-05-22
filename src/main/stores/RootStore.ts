@@ -14,7 +14,7 @@ import { IUserRepository } from "../../repositories/IUserRepository"
 import { UserRepository } from "../../repositories/UserRepository"
 import { setSong } from "../actions"
 import {
-  loadMidiFileDirectly,
+  loadMidiFileDirectly, loadMidiFromContext,
   loadSongFromExternalMidiFile
 } from "../actions/cloudSong"
 import { pushHistory } from "../actions/history"
@@ -57,6 +57,7 @@ export type InitializationPhase =
 
 export default class RootStore {
   song: Song = emptySong()
+  midiData: Uint8Array = new Uint8Array()
   initializationPhase: InitializationPhase = "initializing"
 
   readonly cloudSongRepository: ICloudSongRepository = new CloudSongRepository(
@@ -176,6 +177,9 @@ export default class RootStore {
       // const song = await loadSongFromExternalMidiFile(this)(openParam)
       console.log("loading midi file from: "+openParam)
       const song = await loadMidiFileDirectly()(openParam)
+
+      // //todo: replace with context uint8array
+      // const song = await loadMidiFromContext()(new Uint8Array(), "song2")
       setSong(this)(song)
     }
   }

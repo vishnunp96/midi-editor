@@ -110,3 +110,14 @@ export const loadMidiFileDirectly =
       song.isSaved = true
       return song
     }
+
+export const loadMidiFromContext =
+  () =>
+    async (midiData: Uint8Array, basename: string) => {
+      console.log('MIDI file byte stream length:', midiData.length);
+
+      const song = songFromMidi(midiData)
+      song.name = basename
+      song.isSaved = true
+      return song
+    }
