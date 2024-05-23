@@ -64,9 +64,9 @@ export const loadSongFromExternalMidiFile =
   async (midiFileUrl: string) => {
     console.log("uploading from: "+ midiFileUrl + " to firebase")
     const id = await cloudMidiRepository.storeMidiFile(midiFileUrl)
-    const data = await cloudMidiRepository.get(id)
+    const {data, fileName} = await cloudMidiRepository.get(id)
     const song = songFromMidi(data)
-    song.name = basename(midiFileUrl) ?? ""
+    song.name = fileName
     song.isSaved = true
     return song
   }
@@ -93,32 +93,14 @@ export const unpublishSong =
     await cloudSongRepository.unpublish(song.cloudSongId)
   }
 
-export const loadMidiFileDirectly =
-  () =>
-    async (midiFileUrl: string) => {
-      console.log("midifileurl to ping:" + midiFileUrl)
-      const response = await fetch(midiFileUrl);
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
 
-      const data = await response.arrayBuffer();
-      const uint8Array = new Uint8Array(data);
-      console.log('MIDI file byte stream length:', uint8Array.length);
-
-      const song = songFromMidi(uint8Array)
-      song.name = basename(midiFileUrl) ?? ""
-      song.isSaved = true
-      return song
-    }
-
-export const loadMidiFromContext =
-  () =>
-    async (midiData: Uint8Array, basename: string) => {
-      console.log('MIDI file byte stream length:', midiData.length);
-
-      const song = songFromMidi(midiData)
-      song.name = basename
+export const loadSongFromMidiId =
+  ({ cloudMidiRepository }: RootStore) =>
+    async (midiId: string) => {
+      console.log("Retrieving midiId: "+midiId)
+      const {data, fileName} = await cloudMidiRepository.get(midiId)
+      const song = songFromMidi(data)
+      song.name = fileName
       song.isSaved = true
       return song
     }

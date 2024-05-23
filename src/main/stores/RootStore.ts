@@ -14,8 +14,7 @@ import { IUserRepository } from "../../repositories/IUserRepository"
 import { UserRepository } from "../../repositories/UserRepository"
 import { setSong } from "../actions"
 import {
-  loadMidiFileDirectly, loadMidiFromContext,
-  loadSongFromExternalMidiFile
+  loadSongFromExternalMidiFile, loadSongFromMidiId
 } from "../actions/cloudSong"
 import { pushHistory } from "../actions/history"
 import { GroupOutput } from "../services/GroupOutput"
@@ -171,12 +170,17 @@ export default class RootStore {
   private async loadExternalMidiOnLaunchIfNeeded() {
     const params = new URLSearchParams(window.location.search)
     const openParam = params.get("open")
+    const idParam = params.get("id");
 
     if (openParam) {
       this.initializationPhase = "loadExternalMidi"
-      console.log("loading midi file from: "+openParam)
+      console.log("loading midi file from URL: "+openParam)
       const song = await loadSongFromExternalMidiFile(this)(openParam)
-
+      setSong(this)(song)
+    } else if(idParam) {
+      this.initializationPhase = "loadExternalMidi"
+      console.log("loading midi file from ID: "+idParam)
+      const song = await loadSongFromMidiId(this)(idParam)
       setSong(this)(song)
     }
   }

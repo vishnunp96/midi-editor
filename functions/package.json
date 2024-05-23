@@ -13,9 +13,12 @@
     "axios": "^1.6.2",
     "firebase-admin": "^11.11.1",
     "firebase-functions": "^4.5.0",
-    "googleapis": "^129.0.0"
+    "firebase": "^10.8.1",
+    "googleapis": "^129.0.0",
+    "md5": "^2.3.0"
   },
   "devDependencies": {
+    "@types/md5": "^2.3.5",
     "typescript": "^5.3.3"
   }
 }
