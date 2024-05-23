@@ -174,12 +174,9 @@ export default class RootStore {
 
     if (openParam) {
       this.initializationPhase = "loadExternalMidi"
-      // const song = await loadSongFromExternalMidiFile(this)(openParam)
       console.log("loading midi file from: "+openParam)
-      const song = await loadMidiFileDirectly()(openParam)
+      const song = await loadSongFromExternalMidiFile(this)(openParam)
 
-      // //todo: replace with context uint8array
-      // const song = await loadMidiFromContext()(new Uint8Array(), "song2")
       setSong(this)(song)
     }
   }

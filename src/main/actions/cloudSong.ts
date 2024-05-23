@@ -62,6 +62,7 @@ export const deleteSong =
 export const loadSongFromExternalMidiFile =
   ({ cloudMidiRepository }: RootStore) =>
   async (midiFileUrl: string) => {
+    console.log("uploading from: "+ midiFileUrl + " to firebase")
     const id = await cloudMidiRepository.storeMidiFile(midiFileUrl)
     const data = await cloudMidiRepository.get(id)
     const song = songFromMidi(data)

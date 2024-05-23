@@ -18,7 +18,9 @@ const firebaseConfig = {
   storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
   messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
   appId: process.env.FIREBASE_APP_ID,
+  measurementId: process.env.FIREBASE_MEASUREMENT_ID,
 }
+
 
 const modules = (() => {
   try {
@@ -28,6 +30,7 @@ const modules = (() => {
     const functions = getFunctions(app)
 
     if (process.env.NODE_ENV !== "production") {
+      console.log("Using Firebase Emulators")
       const currentHost = window.location.hostname
       connectAuthEmulator(auth, `http://${currentHost}:9099`)
       connectFirestoreEmulator(firestore, currentHost, 8080)
