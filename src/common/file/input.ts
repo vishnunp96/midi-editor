@@ -23,7 +23,7 @@ async function handleFiles(files: FileList | null): Promise<void> {
   console.log("File content:" + midiData);
   const id = await cloudMidiRepository.uploadMidiData(midiData, files[0].name);
 
-  window.location.replace("/edit?id=" + id);
+  window.location.replace("/edit.html?id=" + id);
 }
 
 export function dragDropInput(e: DragEvent): void{
