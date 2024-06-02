@@ -1,31 +1,18 @@
 import styled from "@emotion/styled"
-import { observer } from "mobx-react-lite"
 import { FC } from "react"
-import { useStores } from "../../hooks/useStores"
-import { ArrangeEditor } from "../ArrangeView/ArrangeEditor"
-import { BuildInfo } from "../BuildInfo"
-import { CloudFileDialog } from "../CloudFileDialog/CloudFileDialog"
-import { ControlSettingDialog } from "../ControlSettingDialog/ControlSettingDialog"
-import { ExportDialog } from "../ExportDialog/ExportDialog"
-import { ExportProgressDialog } from "../ExportDialog/ExportProgressDialog"
 import { Head } from "../Head/Head"
-import { HelpDialog } from "../Help/HelpDialog"
 import { InitializeErrorDialog } from "../InitializeErrorDialog/InitializeErrorDialog"
 import { InitializeLoadingDialog } from "../LoadingDialog/InitializeLoadingDialog"
-import { Navigation } from "../Navigation/Navigation"
 import { OnBeforeUnload } from "../OnBeforeUnload/OnBeforeUnload"
-import { PianoRollEditor } from "../PianoRoll/PianoRollEditor"
 import { PublishDialog } from "../PublishDialog/PublishDialog"
-import { SettingDialog } from "../SettingDialog/SettingDialog"
 import { SignInDialog } from "../SignInDialog/SignInDialog"
-import { TempoEditor } from "../TempoGraph/TempoEditor"
-import { TransportPanel } from "../TransportPanel/TransportPanel"
-import { ArrangeTransposeDialog } from "../TransposeDialog/ArrangeTransposeDialog"
-import { PianoRollTransposeDialog } from "../TransposeDialog/PianoRollTransposeDialog"
 import background from "../../assets/landing-bg-wallpaper.jpg"
 import HamburgMenu from "../../../components/LandingComponents/HamburgMenu/HamburgMenu"
 import UploadButton
   from "../../../components/LandingComponents/UploadButton/UploadButton"
+import SpeakerButton
+  from "../../../components/LandingComponents/SpeakerButton/SpeakerButton"
+import { dragDropInput } from "../../../common/file/input"
 
 
 const Container = styled.div`
@@ -87,7 +74,10 @@ const BackGround = styled.div`
 
 export const LandingView: FC = () => (
   <>
-    <BackGround>
+    <BackGround onDragOver={(ev)=> ev.preventDefault()}
+                onDragLeave={(ev)=> ev.preventDefault()}
+                onDragEnd={(ev)=> ev.preventDefault()}
+                onDrop={(ev)=> dragDropInput(ev)}>
       <Page>
         <Header>
           <ImageLink href="/"><Image src="favicon.svg" /></ImageLink>
@@ -97,6 +87,7 @@ export const LandingView: FC = () => (
         </Container>
         <Footer>
           <UploadButton />
+          <SpeakerButton />
         </Footer>
       </Page>
     </BackGround>

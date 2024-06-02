@@ -41,7 +41,7 @@ window.addEventListener("DOMContentLoaded", (e) => {
 
 
   const fileDrop = document.querySelector(".background-content") as HTMLDivElement;
-  fileDrop.addEventListener("drop", dragDropInput);
+  // fileDrop.addEventListener("drop", dragDropInput);
   fileDrop.addEventListener("dragleave", ev => ev.preventDefault());
   fileDrop.addEventListener("dragend", ev => ev.preventDefault());
   fileDrop.addEventListener("dragover", ev => ev.preventDefault());

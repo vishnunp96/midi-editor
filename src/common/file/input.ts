@@ -27,7 +27,7 @@ async function handleFiles(files: FileList | null): Promise<void> {
   window.location.replace("/edit.html?id=" + id);
 }
 
-export function dragDropInput(e: DragEvent): void{
+export function dragDropInput(e: React.DragEvent): void{
   e.preventDefault();
   if (e.dataTransfer){
     handleFiles(e.dataTransfer.files).then(_ => console.log("File handled"));
