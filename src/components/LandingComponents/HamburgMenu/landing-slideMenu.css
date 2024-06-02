@@ -1,0 +1,49 @@
+
+.sliding-menu {
+    margin: 1rem 0.5rem;
+    position: relative;
+    right: 200%;
+    width: 300%;
+    text-transform: uppercase;
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    font-size: 2rem;
+    z-index: 1;
+}
+
+.sliding-menu > a {
+    margin: 1rem;
+    color: white;
+    text-decoration: none;
+}
+
+.sliding-menu.hidden {
+    display: none;
+}
+
+.sliding-menu.in {
+    animation: slideInRight 0.5s forwards;
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+.sliding-menu.out {
+    animation: slideOutRight 0.5s forwards;
+}
+
+@keyframes slideOutRight {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(100%);
+    }
+}

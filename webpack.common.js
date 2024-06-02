@@ -22,11 +22,19 @@ module.exports = {
         test: /\.(png|jpg|jpeg|gif|woff|woff2|eot|ttf)$/,
         loader: "url-loader",
       },
+      {
+        test: /\.css$/,
+        use: ["style-loader", "css-loader"]
+      },
+      {
+        test: /\.svg$/,
+        use: ['@svgr/webpack'],
+      },
     ],
   },
   resolve: {
     modules: ["src", "node_modules", "src/main", "src/common"],
-    extensions: [".js", ".jsx", ".ts", ".tsx"],
+    extensions: [".js", ".jsx", ".ts", ".tsx", ".css"],
   },
   plugins: [
     new Dotenv({

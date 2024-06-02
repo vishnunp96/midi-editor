@@ -14,6 +14,7 @@ import { ToastProvider } from "../../hooks/useToast"
 import RootStore from "../../stores/RootStore"
 import { GlobalKeyboardShortcut } from "../KeyboardShortcut/GlobalKeyboardShortcut"
 import { RootView } from "../RootView/RootView"
+import { LandingView } from "../LandingView/LandingView"
 import { EmotionThemeProvider } from "../Theme/EmotionThemeProvider"
 import { GlobalCSS } from "../Theme/GlobalCSS"
 import { LocalizationProvider } from "./LocalizationProvider"
@@ -25,6 +26,7 @@ Sentry.init({
   integrations: [new Integrations.BrowserTracing()],
   tracesSampleRate: 1.0,
 })
+
 
 const rootStore = new RootStore()
 
@@ -41,7 +43,8 @@ export function App() {
                     <LocalizationProvider>
                       <GlobalKeyboardShortcut />
                       <GlobalCSS />
-                      <RootView />
+                      {/*<RootView />*/}
+                      <LandingView />
                     </LocalizationProvider>
                   </DialogProvider>
                 </PromptProvider>

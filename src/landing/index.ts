@@ -48,7 +48,7 @@ window.addEventListener("DOMContentLoaded", (e) => {
 
 
   const fileInput = document.querySelector(".upload-input") as HTMLInputElement;
-  fileInput.addEventListener("change", uploadInput);
+  // fileInput.addEventListener("change", uploadInput);
 
   console.log("DOM fully loaded and parsed")
   localize();

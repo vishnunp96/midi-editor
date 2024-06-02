@@ -2,6 +2,7 @@ import { ICloudMidiRepository } from "../../repositories/ICloudMidiRepository"
 import { CloudMidiRepository } from "../../repositories/CloudMidiRepository"
 import { firestore, functions } from "../../firebase/firebase"
 import { Bytes } from "firebase/firestore"
+import { ChangeEvent } from "react"
 
 // get a rootStore for normal website too.
 const cloudMidiRepository: ICloudMidiRepository = new CloudMidiRepository(
@@ -33,7 +34,7 @@ export function dragDropInput(e: DragEvent): void{
   }
 }
 
-export function uploadInput(e: Event): void{
+export function uploadInput(e: ChangeEvent<HTMLInputElement>): void{
     if (e.target instanceof HTMLInputElement){
       handleFiles((e.target as HTMLInputElement).files).then(_ => console.log("File handled"));
     }
