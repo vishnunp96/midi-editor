@@ -37,6 +37,7 @@ import SettingStore from "./SettingStore"
 import { SoundFontStore } from "./SoundFontStore"
 import TempoEditorStore from "./TempoEditorStore"
 import { registerReactions } from "./reactions"
+import HomeRouter from "./HomeRouter"
 
 // we use any for now. related: https://github.com/Microsoft/TypeScript/issues/1897
 type Json = any
@@ -72,6 +73,7 @@ export default class RootStore {
   readonly userRepository: IUserRepository = new UserRepository(firestore, auth)
 
   readonly router = new Router()
+  readonly homeRouter = new HomeRouter()
   readonly trackMute = new TrackMute()
   readonly historyStore = new HistoryStore<SerializedRootStore>()
   readonly rootViewStore = new RootViewStore()
@@ -182,6 +184,22 @@ export default class RootStore {
       console.log("loading midi file from ID: "+idParam)
       const song = await loadSongFromMidiId(this)(idParam)
       setSong(this)(song)
+    }
+  }
+
+
+
+  async loadExternalMidi(id: string) {
+    try {
+      this.initializationPhase = "loadExternalMidi"
+      console.log("loading midi file from ID: "+id)
+      const song = await loadSongFromMidiId(this)(id)
+      setSong(this)(song)
+      this.initializationPhase = "done"
+    } catch (e) {
+      this.initializationPhase = "error"
+      this.rootViewStore.initializeError = e as Error
+      this.rootViewStore.openInitializeErrorDialog = true
     }
   }
 

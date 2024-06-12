@@ -1,5 +1,5 @@
 import styled from "@emotion/styled"
-import { FC } from "react"
+import { FC, useCallback } from "react"
 import { Head } from "../Head/Head"
 import { InitializeErrorDialog } from "../InitializeErrorDialog/InitializeErrorDialog"
 import { InitializeLoadingDialog } from "../LoadingDialog/InitializeLoadingDialog"
@@ -12,7 +12,8 @@ import UploadButton
   from "../../../components/LandingComponents/UploadButton/UploadButton"
 import SpeakerButton
   from "../../../components/LandingComponents/SpeakerButton/SpeakerButton"
-import { dragDropInput } from "../../../common/file/input"
+import { dragDropInput, uploadInput } from "../../../common/file/input"
+import { useStores } from "../../hooks/useStores"
 
 
 const Container = styled.div`
@@ -72,12 +73,22 @@ const BackGround = styled.div`
 `
 
 
-export const LandingView: FC = () => (
+export const LandingView: FC = () => {
+
+  const rootStore = useStores()
+
+  const handleDragDropInput = useCallback((e: React.DragEvent) => {
+    dragDropInput(e, rootStore)
+  }, [rootStore])
+
+
+  return (
   <>
     <BackGround onDragOver={(ev)=> ev.preventDefault()}
                 onDragLeave={(ev)=> ev.preventDefault()}
                 onDragEnd={(ev)=> ev.preventDefault()}
-                onDrop={(ev)=> dragDropInput(ev)}>
+                onDrop={(ev)=> handleDragDropInput(ev)}
+    >
       <Page>
         <Header>
           <ImageLink href="/"><Image src="favicon.svg" /></ImageLink>
@@ -98,4 +109,5 @@ export const LandingView: FC = () => (
     <InitializeLoadingDialog />
     <PublishDialog />
   </>
-)
+  )
+}

@@ -1,16 +1,10 @@
-import { ICloudMidiRepository } from "../../repositories/ICloudMidiRepository"
-import { CloudMidiRepository } from "../../repositories/CloudMidiRepository"
-import { firestore, functions } from "../../firebase/firebase"
 import { Bytes } from "firebase/firestore"
 import { ChangeEvent } from "react"
+import RootStore from "../../main/stores/RootStore"
 
-// get a rootStore for normal website too.
-const cloudMidiRepository: ICloudMidiRepository = new CloudMidiRepository(
-  firestore,
-  functions,
-)
+async function handleFiles(files: FileList | null, rootStore: RootStore): Promise<void> {
+  const {cloudMidiRepository, homeRouter} = rootStore;
 
-async function handleFiles(files: FileList | null): Promise<void> {
   if (files == null || files.length !== 1 || files[0].type !== "audio/midi") {
     console.log("File list of unsupported type.");
     alert("Only .mid files supported, one at a time!")
@@ -24,18 +18,19 @@ async function handleFiles(files: FileList | null): Promise<void> {
   console.log("File content:" + midiData);
   const id = await cloudMidiRepository.uploadMidiData(midiData, files[0].name);
 
-  window.location.replace("/edit.html?id=" + id);
+  await rootStore.loadExternalMidi(id);
+  homeRouter.path = "/edit";
 }
 
-export function dragDropInput(e: React.DragEvent): void{
+export function dragDropInput(e: React.DragEvent, rootStore: RootStore): void{
   e.preventDefault();
   if (e.dataTransfer){
-    handleFiles(e.dataTransfer.files).then(_ => console.log("File handled"));
+    handleFiles(e.dataTransfer.files, rootStore).then(_ => console.log("File handled"));
   }
 }
 
-export function uploadInput(e: ChangeEvent<HTMLInputElement>): void{
+export function uploadInput(e: ChangeEvent<HTMLInputElement>, rootStore: RootStore): void{
     if (e.target instanceof HTMLInputElement){
-      handleFiles((e.target as HTMLInputElement).files).then(_ => console.log("File handled"));
+      handleFiles((e.target as HTMLInputElement).files, rootStore).then(_ => console.log("File handled"));
     }
 }
