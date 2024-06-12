@@ -8,12 +8,10 @@ import { envString } from "../../../common/localize/envString"
 import { Localized } from "../../../components/Localized"
 import { Tooltip } from "../../../components/Tooltip"
 import { useStores } from "../../hooks/useStores"
-import ArrangeIcon from "../../images/icons/arrange.svg"
-import PianoIcon from "../../images/icons/piano.svg"
-import TempoIcon from "../../images/icons/tempo.svg"
+import TickIcon from "../../images/icons/circled-tick.svg"
+import FavIcon from "../../images/icons/favicon.svg"
 import Logo from "../../images/logo-circle.svg"
 import { FileMenuButton } from "./FileMenuButton"
-import { UserButton } from "./UserButton"
 
 const BannerContainer = styled.div`
   background: ${({ theme }) => theme.themeColor};
@@ -81,9 +79,8 @@ const FlexibleSpacer = styled.div`
 `
 
 export const IconStyle: CSSProperties = {
-  width: "1.3rem",
-  height: "1.3rem",
-  fill: "currentColor",
+  width: "1.5rem",
+  height: "1.5rem",
 }
 
 export const Navigation: FC = observer(() => {
@@ -91,12 +88,34 @@ export const Navigation: FC = observer(() => {
     rootViewStore,
     authStore: { authUser: user },
     router,
+    homeRouter
   } = useStores()
 
   return (
     <Container>
+
+      <Tooltip
+        title={
+          <>
+            <Localized default="Go home">home</Localized>
+          </>
+        }
+        delayDuration={500}
+      >
+        <Tab
+          className="home-icon"
+          onMouseDown={useCallback(() => (homeRouter.path = "/home"), [])}
+        >
+          <FavIcon style={IconStyle} viewBox="0 0 512 512"/>
+          <TabTitle>
+            <Localized default="Home">home</Localized>
+          </TabTitle>
+        </Tab>
+      </Tooltip>
+
       <FileMenuButton />
 
+      {/*
       <Tooltip
         title={
           <>
@@ -157,8 +176,12 @@ export const Navigation: FC = observer(() => {
         </Tab>
       </Tooltip>
 
+      */}
+
+
       <FlexibleSpacer />
 
+      {/*}
       <Tab
         onClick={useCallback(
           () => (rootViewStore.openSettingDialog = true),
@@ -188,6 +211,27 @@ export const Navigation: FC = observer(() => {
       </Tab>
 
       <UserButton />
+      */}
+
+      <Tooltip
+        title={
+          <>
+            <Localized default="Proceed with MIDI">proceed-midi</Localized>
+          </>
+        }
+        delayDuration={500}
+      >
+        <Tab
+          className="tick-midi"
+          // onMouseDown={useCallback(() => (router.path = "/tempo"), [])}
+        >
+          <TickIcon style={IconStyle} />
+          <TabTitle>
+            <Localized default="Proceed">proceed</Localized>
+          </TabTitle>
+        </Tab>
+      </Tooltip>
+
     </Container>
   )
 })

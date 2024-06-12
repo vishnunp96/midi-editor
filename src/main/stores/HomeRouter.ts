@@ -3,7 +3,7 @@ import { makeObservable, observable } from "mobx"
 export type RoutePath = "/home" | "/edit"
 
 export default class HomeRouter {
-  path: RoutePath = "/home"
+  path: RoutePath = "/edit"
 
   constructor() {
     makeObservable(this, {

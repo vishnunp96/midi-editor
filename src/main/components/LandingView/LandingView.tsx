@@ -13,6 +13,10 @@ import UploadButton
 import SpeakerButton
   from "../../../components/LandingComponents/SpeakerButton/SpeakerButton"
 import { useStores } from "../../hooks/useStores"
+import {
+  ImageBox,
+  ImageLink
+} from "../../../components/LandingComponents/ImageTemplates"
 
 
 const Container = styled.div`
@@ -21,15 +25,6 @@ const Container = styled.div`
     flex-direction: column;
     flex-grow: 1;
     overflow: hidden;
-`
-
-const Image = styled.img`
-    height: 4rem;    
-`
-
-const ImageLink = styled.a`
-    padding: 1rem;
-    margin: 0 0.5rem 0;
 `
 
 const Header = styled.header`
@@ -93,7 +88,7 @@ export const LandingView: FC = () => {
     >
       <Page>
         <Header>
-          <ImageLink href="/"><Image src="favicon.svg" /></ImageLink>
+          <ImageLink href="/"><ImageBox src="favicon.svg" /></ImageLink>
           <HamburgMenu />
         </Header>
         <Container>
