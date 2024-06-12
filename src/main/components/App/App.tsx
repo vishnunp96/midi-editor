@@ -60,8 +60,6 @@ export function App() {
                       <GlobalKeyboardShortcut />
                       <GlobalCSS />
                       <HomeRouter />
-                      {/*<RootView />*/}
-                      {/*<LandingView />*/}
                     </LocalizationProvider>
                   </DialogProvider>
                 </PromptProvider>

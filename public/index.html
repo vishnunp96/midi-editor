@@ -1,76 +1,54 @@
-<!doctype html>
-<html lang="en">
-
+<!DOCTYPE html>
+<meta charset="UTF-8" />
+<title>signal</title>
 <head>
-  <title>TearWorks</title>
-  <link rel="icon" type="image/x-icon" href="favicon.svg">
+  <meta
+    content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no"
+    name="viewport"
+  />
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script
+    async
+    src="https://www.googletagmanager.com/gtag/js?id=UA-179088031-1"
+  ></script>
+  <script>
+    window.dataLayer = window.dataLayer || []
+    function gtag() {
+      dataLayer.push(arguments)
+    }
+    gtag("js", new Date())
 
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    gtag("config", "UA-179088031-1")
+  </script>
 
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
-    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-  <link href="/landing-style.css" rel="stylesheet" />
-  <link href="/landing-hamburg-menu.css" rel="stylesheet" />
-  <link href="/landing-slideMenu.css" rel="stylesheet">
-  <link href="/landing-volumeButton.css" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;600;800&display=swap"
+    rel="stylesheet"
+  />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+  <!-- PWA -->
+  <link rel="manifest" href="/manifest.webmanifest" />
+  <script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker
+        .register("/service-worker.js", {
+          scope: "/edit",
+        })
+        .then(() => console.log("service worker loaded successfully"))
+        .catch((e) => console.error(e))
+    }
+  </script>
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="theme-color" content="#272a36" />
+  <link rel="apple-touch-icon" sizes="192x192" href="/icon-192x192.png" />
 </head>
-
 <body>
-  <div class="background-content" style="background-image: url('landing-bg-wallpaper.jpg')">
-<!--    <img alt="bg-wallpaper" src="/landing-bg-wallpaper.jpg"/>-->
-    <div class="gradient-overlay"></div>
-    <div class="all-content">
-      <header>
-        <a class="img-icons" href="/"><img alt="TearWorks" src="favicon.svg" /></a>
-        <div class="box-hamburg">
-          <div class="btn-hamburg not-active">
-            <span class="span-hamburg"></span>
-            <span class="span-hamburg"></span>
-            <span class="span-hamburg"></span>
-          </div>
-        </div>
-      </header>
-      <div class="main-content">
-<!--              <img class="tooltip-custom" data-toggle="tooltip" data-html="true"-->
-<!--                   data-placement="right"  src="./landing-tooltip-circle.svg" alt="i"-->
-<!--                   title="<em>Tooltip</em> <u>with</u> <b>HTML</b>"-->
-<!--              />-->
-        <div class="sliding-menu hidden">
-          <a href="/edit.html">EDIT</a>
-          <a href="/public">Item 2</a>
-          <a href="/public">Item 3</a>
-          <a href="/public">Item 4</a>
-        </div>
-      </div>
-      <footer>
-        <div class="upload-option">
-          <input type="file" accept="audio/midi" class="upload-input">
-          <img alt="Upload MIDI" src="landing-plus.svg" />
-          <div class="upload-text">
-            <h2>Upload MIDI</h2>
-            <!--          <p>or select a folder</p>-->
-          </div>
-        </div>
-        <div class="speaker">
-          <img alt="Mute" src="/landing-speaker.svg" />
-          <span></span>
-        </div>
-      </footer>
-    </div>
-  </div>
-
-  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-    crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
-    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-    crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
-    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-    crossorigin="anonymous"></script>
-<!--  <script src="landing-tooltip.js"></script>-->
+  <div id="root"></div>
 </body>
-
-
-</html>

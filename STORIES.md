@@ -19,3 +19,14 @@ Backend
 [ ] - pass uploaded file as context
 [ ] - load rootstore with it
 [ ] - load base webpage with it.
+
+
+
+
+FIREBASE -
+**DONT** firebase init
+
+FOR DEPLOY
+    firebase deploy
+FOR ONLY FUNCTIONS
+    firebase deploy --only functions

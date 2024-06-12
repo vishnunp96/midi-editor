@@ -20,7 +20,7 @@ const HamburgMenu = () => {
         <span className="span-hamburg"></span>
       </div>
       <div className={`sliding-menu ${menuOpened ? (isOpen ? "in": "out") : "hidden"}`}>
-        <a href="/edit.html">EDIT</a>
+        <a href="/index.html">EDIT</a>
         <a href="/public">Item 2</a>
         <a href="/public">Item 3</a>
         <a href="/public">Item 4</a>
