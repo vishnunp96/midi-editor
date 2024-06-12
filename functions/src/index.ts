@@ -51,6 +51,7 @@ export const storeMidiFile = functions.https.onCall(async (data) => {
       hash: midiHash,
       createdAt: FieldValue.serverTimestamp(),
       updatedAt: FieldValue.serverTimestamp(),
+      paymentReceived: false
     })
     return { message: "MIDI file has been stored.", docId: docRef.id }
   } catch (error) {
@@ -149,6 +150,7 @@ export const uploadMidiData = functions.https.onCall(async (data) => {
       hash: midiHash,
       createdAt: FieldValue.serverTimestamp(),
       updatedAt: FieldValue.serverTimestamp(),
+      paymentReceived: false
     })
     return { message: "MIDI file has been stored.", docId: docRef.id }
   } catch (error) {

@@ -2,6 +2,9 @@ import { Bytes } from "firebase/firestore"
 import { ChangeEvent } from "react"
 import RootStore from "../../main/stores/RootStore"
 
+// can be deleted once home page is cleared out.
+
+
 async function handleFiles(files: FileList | null, rootStore: RootStore): Promise<void> {
   const {cloudMidiRepository, homeRouter} = rootStore;
 
@@ -18,15 +21,8 @@ async function handleFiles(files: FileList | null, rootStore: RootStore): Promis
   console.log("File content:" + midiData);
   const id = await cloudMidiRepository.uploadMidiData(midiData, files[0].name);
 
-  await rootStore.loadExternalMidi(id);
+  // await rootStore.loadExternalMidi(id);
   homeRouter.path = "/edit";
-}
-
-export function dragDropInput(e: React.DragEvent, rootStore: RootStore): void{
-  e.preventDefault();
-  if (e.dataTransfer){
-    handleFiles(e.dataTransfer.files, rootStore).then(_ => console.log("File handled"));
-  }
 }
 
 export function uploadInput(e: ChangeEvent<HTMLInputElement>, rootStore: RootStore): void{

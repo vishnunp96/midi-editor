@@ -12,7 +12,6 @@ import UploadButton
   from "../../../components/LandingComponents/UploadButton/UploadButton"
 import SpeakerButton
   from "../../../components/LandingComponents/SpeakerButton/SpeakerButton"
-import { dragDropInput, uploadInput } from "../../../common/file/input"
 import { useStores } from "../../hooks/useStores"
 
 
@@ -78,7 +77,10 @@ export const LandingView: FC = () => {
   const rootStore = useStores()
 
   const handleDragDropInput = useCallback((e: React.DragEvent) => {
-    dragDropInput(e, rootStore)
+    e.preventDefault()
+    if (e.dataTransfer){
+      rootStore.loadExternalMidi(e.dataTransfer.files).then(r => console.log("File handled"))
+    }
   }, [rootStore])
 
 

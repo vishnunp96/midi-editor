@@ -1,5 +1,5 @@
 import { localized } from "../common/localize/localizedString"
-import { dragDropInput, uploadInput } from "../common/file/input"
+// import { dragDropInput, uploadInput } from "../common/file/input"
 
 const localizeElement = (e: Element) => {
   const key = e.getAttribute("data-i18n")

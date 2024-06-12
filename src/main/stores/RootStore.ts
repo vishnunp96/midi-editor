@@ -5,16 +5,21 @@ import Song, { emptySong } from "../../common/song"
 import TrackMute from "../../common/trackMute"
 import { auth, firestore, functions } from "../../firebase/firebase"
 import { CloudMidiRepository } from "../../repositories/CloudMidiRepository"
-import { CloudSongDataRepository } from "../../repositories/CloudSongDataRepository"
+import {
+  CloudSongDataRepository
+} from "../../repositories/CloudSongDataRepository"
 import { CloudSongRepository } from "../../repositories/CloudSongRepository"
 import { ICloudMidiRepository } from "../../repositories/ICloudMidiRepository"
-import { ICloudSongDataRepository } from "../../repositories/ICloudSongDataRepository"
+import {
+  ICloudSongDataRepository
+} from "../../repositories/ICloudSongDataRepository"
 import { ICloudSongRepository } from "../../repositories/ICloudSongRepository"
 import { IUserRepository } from "../../repositories/IUserRepository"
 import { UserRepository } from "../../repositories/UserRepository"
 import { setSong } from "../actions"
 import {
-  loadSongFromExternalMidiFile, loadSongFromMidiId
+  loadSongFromExternalMidiFile,
+  loadSongFromMidiId
 } from "../actions/cloudSong"
 import { pushHistory } from "../actions/history"
 import { GroupOutput } from "../services/GroupOutput"
@@ -22,7 +27,7 @@ import { MIDIInput, previewMidiInput } from "../services/MIDIInput"
 import { MIDIRecorder } from "../services/MIDIRecorder"
 import { SoundFontSynth } from "../services/SoundFontSynth"
 import ArrangeViewStore, {
-  SerializedArrangeViewStore,
+  SerializedArrangeViewStore
 } from "./ArrangeViewStore"
 import { AuthStore } from "./AuthStore"
 import { CloudFileStore } from "./CloudFileStore"
@@ -38,6 +43,7 @@ import { SoundFontStore } from "./SoundFontStore"
 import TempoEditorStore from "./TempoEditorStore"
 import { registerReactions } from "./reactions"
 import HomeRouter from "./HomeRouter"
+import { Bytes } from "firebase/firestore"
 
 // we use any for now. related: https://github.com/Microsoft/TypeScript/issues/1897
 type Json = any
@@ -189,12 +195,18 @@ export default class RootStore {
 
 
 
-  async loadExternalMidi(id: string) {
+  async loadExternalMidi(files: FileList) {
     try {
       this.initializationPhase = "loadExternalMidi"
+      console.log("Handling files..")
+      const id = await this.handleFiles(files)
+      if(id === "error")
+        throw new Error("Error handling files")
+
       console.log("loading midi file from ID: "+id)
       const song = await loadSongFromMidiId(this)(id)
       setSong(this)(song)
+      this.homeRouter.path = "/edit";
       this.initializationPhase = "done"
     } catch (e) {
       this.initializationPhase = "error"
@@ -213,5 +225,20 @@ export default class RootStore {
 
   get pushHistory() {
     return pushHistory(this)
+  }
+
+  private async handleFiles(files: FileList | null): Promise<string> {
+    if (files == null || files.length !== 1 || files[0].type !== "audio/midi") {
+      console.log("File list of unsupported type.");
+      alert("Only .mid files supported, one at a time!")
+      return "error";
+    }
+    console.log("File accepted:" + files[0].name);
+    const midiBuffer = await files[0].arrayBuffer();
+    const midiData = Bytes.fromUint8Array(new Uint8Array(midiBuffer)).toBase64();
+
+    console.log("File length:" + midiBuffer.byteLength);
+    console.log("File content:" + midiData);
+    return await this.cloudMidiRepository.uploadMidiData(midiData, files[0].name);
   }
 }

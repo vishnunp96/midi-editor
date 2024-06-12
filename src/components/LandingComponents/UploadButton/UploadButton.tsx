@@ -1,6 +1,5 @@
 import styled from "@emotion/styled"
-import { uploadInput } from "../../../common/file/input"
-import { FC, useCallback } from "react"
+import { ChangeEvent, FC, useCallback } from "react"
 import { observer } from "mobx-react-lite"
 import { useStores } from "../../../main/hooks/useStores"
 
@@ -35,7 +34,15 @@ export const UploadButton: FC = observer(() => {
   const rootStore = useStores()
 
   const handleButtonInput = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    uploadInput(e, rootStore)
+    // uploadInput(e, rootStore)
+    e.preventDefault()
+    if (e.target instanceof HTMLInputElement){
+      const files = (e.target as HTMLInputElement).files
+      if (files)
+        rootStore.loadExternalMidi(files).then(r => console.log("File handled"))
+      else
+        console.log("Files empty")
+    }
   }, [rootStore])
 
 
