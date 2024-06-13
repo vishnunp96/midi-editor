@@ -1,5 +1,5 @@
 import styled from "@emotion/styled"
-import { FC, useCallback } from "react"
+import React, { FC, useCallback } from "react"
 import { Head } from "../Head/Head"
 import { InitializeErrorDialog } from "../InitializeErrorDialog/InitializeErrorDialog"
 import { InitializeLoadingDialog } from "../LoadingDialog/InitializeLoadingDialog"
@@ -17,6 +17,8 @@ import {
   ImageBox,
   ImageLink
 } from "../../../components/LandingComponents/ImageTemplates"
+import { observer } from "mobx-react-lite"
+import { RootView } from "../RootView/RootView"
 
 
 const Container = styled.div`
@@ -66,6 +68,29 @@ const BackGround = styled.div`
     height: 100%;
 `
 
+const PageLanding: FC = () => {
+  return (
+    <h2>Landing Page</h2>
+  )
+}
+
+const PagePayment: FC = () => {
+  return (
+    <h2>Payment Page</h2>
+  )
+}
+
+const PageRouter: FC = observer(() => {
+  const { pageRouter } = useStores()
+  const path = pageRouter.path
+  return (
+    <>
+      {path === "/landing" && <PageLanding />}
+      {path === "/payment" && <PagePayment />}
+    </>
+  )
+})
+
 
 export const LandingView: FC = () => {
 
@@ -92,6 +117,7 @@ export const LandingView: FC = () => {
           <HamburgMenu />
         </Header>
         <Container>
+          <PageRouter />
         </Container>
         <Footer>
           <UploadButton />

@@ -39,8 +39,8 @@ const Column = styled.div`
 `
 
 const Routes: FC = observer(() => {
-  const { router } = useStores()
-  const path = router.path
+  const { midiRouter } = useStores()
+  const path = midiRouter.path
   return (
     <>
       {path === "/track" && <PianoRollEditor />}

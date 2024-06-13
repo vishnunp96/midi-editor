@@ -35,9 +35,13 @@ Sentry.init({
 const rootStore = new RootStore()
 
 
-const HomeRouter: FC = observer(() => {
-  const { homeRouter } = useStores()
-  const path = homeRouter.path
+const TopRouter: FC = observer(() => {
+  const { topRouter, pageRouter } = useStores()
+  const path = topRouter.path
+  // if (path === "/home") {
+  //   console.log("Setting page to landing from " + pageRouter.path)
+  //   pageRouter.path = "/landing"
+  // }
   return (
     <>
       {path === "/home" && <LandingView />}
@@ -59,7 +63,7 @@ export function App() {
                     <LocalizationProvider>
                       <GlobalKeyboardShortcut />
                       <GlobalCSS />
-                      <HomeRouter />
+                      <TopRouter />
                     </LocalizationProvider>
                   </DialogProvider>
                 </PromptProvider>

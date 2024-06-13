@@ -37,13 +37,14 @@ import HistoryStore from "./HistoryStore"
 import { MIDIDeviceStore } from "./MIDIDeviceStore"
 import PianoRollStore, { SerializedPianoRollStore } from "./PianoRollStore"
 import RootViewStore from "./RootViewStore"
-import Router from "./Router"
+import MidiRouter from "./Routers/MidiRouter"
 import SettingStore from "./SettingStore"
 import { SoundFontStore } from "./SoundFontStore"
 import TempoEditorStore from "./TempoEditorStore"
 import { registerReactions } from "./reactions"
-import HomeRouter from "./HomeRouter"
+import TopRouter from "./Routers/TopRouter"
 import { Bytes } from "firebase/firestore"
+import PageRouter from "./Routers/PageRouter"
 
 // we use any for now. related: https://github.com/Microsoft/TypeScript/issues/1897
 type Json = any
@@ -78,8 +79,9 @@ export default class RootStore {
   )
   readonly userRepository: IUserRepository = new UserRepository(firestore, auth)
 
-  readonly router = new Router()
-  readonly homeRouter = new HomeRouter()
+  readonly topRouter = new TopRouter()
+  readonly midiRouter = new MidiRouter()
+  readonly pageRouter = new PageRouter()
   readonly trackMute = new TrackMute()
   readonly historyStore = new HistoryStore<SerializedRootStore>()
   readonly rootViewStore = new RootViewStore()
@@ -206,7 +208,7 @@ export default class RootStore {
       console.log("loading midi file from ID: "+id)
       const song = await loadSongFromMidiId(this)(id)
       setSong(this)(song)
-      this.homeRouter.path = "/edit";
+      this.topRouter.path = "/edit";
       this.initializationPhase = "done"
     } catch (e) {
       this.initializationPhase = "error"

@@ -92,7 +92,7 @@ export const ArrangeView: FC = observer(() => {
       selectedTrackId,
     },
     player,
-    router,
+    midiRouter,
     song: { tracks },
   } = rootStore
 
@@ -213,7 +213,7 @@ export const ArrangeView: FC = observer(() => {
     )
 
   const openTrack = (trackId: number) => {
-    router.pushTrack()
+    midiRouter.pushTrack()
     selectTrack(rootStore)(trackId)
   }
 

@@ -2,7 +2,8 @@ import { makeObservable, observable } from "mobx"
 
 export type RoutePath = "/home" | "/edit"
 
-export default class HomeRouter {
+export default class TopRouter {
+  //toDo: revert when done
   path: RoutePath = "/edit"
 
   constructor() {

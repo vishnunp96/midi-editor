@@ -87,8 +87,9 @@ export const Navigation: FC = observer(() => {
   const {
     rootViewStore,
     authStore: { authUser: user },
-    router,
-    homeRouter
+    midiRouter,
+    topRouter,
+    pageRouter
   } = useStores()
 
   return (
@@ -104,7 +105,10 @@ export const Navigation: FC = observer(() => {
       >
         <Tab
           className="home-icon"
-          onMouseDown={useCallback(() => (homeRouter.path = "/home"), [])}
+          onMouseDown={useCallback(() => {
+            topRouter.path = "/home";
+            pageRouter.path = "/landing";
+          }, [])}
         >
           <FavIcon style={IconStyle} viewBox="0 0 512 512"/>
           <TabTitle>
@@ -223,7 +227,10 @@ export const Navigation: FC = observer(() => {
       >
         <Tab
           className="tick-midi"
-          // onMouseDown={useCallback(() => (router.path = "/tempo"), [])}
+          onMouseDown={useCallback(() => {
+            topRouter.path = "/home";
+            pageRouter.path = "/payment";
+          }, [])}
         >
           <TickIcon style={IconStyle} />
           <TabTitle>

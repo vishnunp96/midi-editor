@@ -119,7 +119,7 @@ const ControlButton = styled(IconButton)`
 
 export const TrackListItem: FC<TrackListItemProps> = observer(({ trackId }) => {
   const rootStore = useStores()
-  const { song, pianoRollStore, rootViewStore, trackMute, router } = rootStore
+  const { song, pianoRollStore, rootViewStore, trackMute, midiRouter } = rootStore
   const track = song.tracks[trackId]
 
   const selected =
@@ -176,7 +176,7 @@ export const TrackListItem: FC<TrackListItemProps> = observer(({ trackId }) => {
     )
   const onClickAddTrack = useCallback(() => addTrack(rootStore)(), [trackId])
   const onSelectTrack = useCallback(() => {
-    router.pushTrack()
+    midiRouter.pushTrack()
     selectTrack(rootStore)(trackId)
   }, [trackId])
   const openDialog = useCallback(() => setDialogOpened(true), [])

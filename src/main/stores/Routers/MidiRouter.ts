@@ -2,7 +2,7 @@ import { makeObservable, observable } from "mobx"
 
 export type RoutePath = "/track" | "/arrange" | "/tempo"
 
-export default class Router {
+export default class MidiRouter {
   path: RoutePath = "/track"
 
   constructor() {
