@@ -19,6 +19,13 @@ import {
 } from "../../../components/LandingComponents/ImageTemplates"
 import { observer } from "mobx-react-lite"
 import { RootView } from "../RootView/RootView"
+import { Tooltip } from "../../../components/Tooltip"
+import { Localized } from "../../../components/Localized"
+import TickIcon from "../../images/icons/circled-tick.svg"
+import { IconStyle, Tab, TabTitle } from "../Navigation/Navigation"
+import { saveFile } from "../../actions/file"
+import RootStore from "../../stores/RootStore"
+import { saveSong } from "../../actions"
 
 
 const Container = styled.div`
@@ -74,9 +81,39 @@ const PageLanding: FC = () => {
   )
 }
 
+const onClickDownload = async (rootStore: RootStore) => {
+  close()
+  saveSong(rootStore)()
+}
+
 const PagePayment: FC = () => {
+  const rootStore = useStores()
+
   return (
-    <h2>Payment Page</h2>
+    <div>
+      <h2>Payment Page</h2>
+
+      <Tooltip
+        title={
+          <>
+            <Localized default="Proceed with MIDI">proceed-midi</Localized>
+          </>
+        }
+        delayDuration={500}
+      >
+        <Tab
+          className="tick-midi"
+          onMouseDown={useCallback(async () => {
+            await onClickDownload(rootStore);
+          }, [])}
+        >
+          <TickIcon style={IconStyle} />
+          <TabTitle>
+            <Localized default="Proceed">proceed</Localized>
+          </TabTitle>
+        </Tab>
+      </Tooltip>
+    </div>
   )
 }
 
