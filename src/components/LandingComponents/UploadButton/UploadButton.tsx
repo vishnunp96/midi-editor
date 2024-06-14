@@ -34,7 +34,6 @@ export const UploadButton: FC = observer(() => {
   const rootStore = useStores()
 
   const handleButtonInput = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    // uploadInput(e, rootStore)
     e.preventDefault()
     if (e.target instanceof HTMLInputElement){
       const files = (e.target as HTMLInputElement).files

@@ -4,7 +4,7 @@ export type RoutePath = "/home" | "/edit"
 
 export default class TopRouter {
   //toDo: revert when done
-  path: RoutePath = "/edit"
+  path: RoutePath = "/home"
 
   constructor() {
     makeObservable(this, {

@@ -45,24 +45,23 @@ export const SignInDialogContent: FC<SignInDialogContentProps> = ({
     <Dialog open={open} onOpenChange={onClose} style={{ minWidth: "20rem" }}>
       <DialogTitle>
         <Localized default="Sign in">sign-in</Localized>
-        <BetaLabel>Beta</BetaLabel>
+        {/*<BetaLabel>Beta</BetaLabel>*/}
       </DialogTitle>
       <DialogContent>
-        <Alert severity="info">
-          <Localized default="Since the cloud function is in beta during development, please download and save your important songs frequently.">
-            cloud-beta-warning
-          </Localized>
-        </Alert>
+        {/*<Alert severity="info">*/}
+        {/*  <Localized default="Since the cloud function is in beta during development, please download and save your important songs frequently.">*/}
+        {/*    cloud-beta-warning*/}
+        {/*  </Localized>*/}
+        {/*</Alert>*/}
         <Description>
-          <Localized default="By signing in, you can save your music to the cloud and resume composing from anywhere at any time.">
+          <Localized default="By signing in, you verify you are a real human and can use our MIDI editor to upload songs!">
             cloud-description
           </Localized>
         </Description>
         <StyledFirebaseAuth
           uiConfig={{
             signInOptions: [
-              GoogleAuthProvider.PROVIDER_ID,
-              GithubAuthProvider.PROVIDER_ID,
+              GoogleAuthProvider.PROVIDER_ID
             ],
             callbacks: {
               signInSuccessWithAuthResult() {

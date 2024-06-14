@@ -18,14 +18,10 @@ import {
   ImageLink
 } from "../../../components/LandingComponents/ImageTemplates"
 import { observer } from "mobx-react-lite"
-import { RootView } from "../RootView/RootView"
-import { Tooltip } from "../../../components/Tooltip"
-import { Localized } from "../../../components/Localized"
-import TickIcon from "../../images/icons/circled-tick.svg"
-import { IconStyle, Tab, TabTitle } from "../Navigation/Navigation"
-import { saveFile } from "../../actions/file"
-import RootStore from "../../stores/RootStore"
-import { saveSong } from "../../actions"
+import { auth } from "../../../firebase/firebase"
+import { PageLanding } from "./PageLanding"
+import { SignInToUpload } from "../Navigation/SignInToUpload"
+import { PagePayment } from "./PagePayment"
 
 
 const Container = styled.div`
@@ -75,47 +71,19 @@ const BackGround = styled.div`
     height: 100%;
 `
 
-const PageLanding: FC = () => {
-  return (
-    <h2>Landing Page</h2>
-  )
-}
 
-const onClickDownload = async (rootStore: RootStore) => {
-  close()
-  saveSong(rootStore)()
-}
-
-const PagePayment: FC = () => {
-  const rootStore = useStores()
+const UploadButtonSwitcher: FC = observer(() => {
+  const {
+    authStore: { authUser: user },
+  } = useStores()
 
   return (
-    <div>
-      <h2>Payment Page</h2>
-
-      <Tooltip
-        title={
-          <>
-            <Localized default="Proceed with MIDI">proceed-midi</Localized>
-          </>
-        }
-        delayDuration={500}
-      >
-        <Tab
-          className="tick-midi"
-          onMouseDown={useCallback(async () => {
-            await onClickDownload(rootStore);
-          }, [])}
-        >
-          <TickIcon style={IconStyle} />
-          <TabTitle>
-            <Localized default="Proceed">proceed</Localized>
-          </TabTitle>
-        </Tab>
-      </Tooltip>
-    </div>
+    <>
+      { user === null ? <SignInToUpload/> : <UploadButton/>}
+    </>
   )
-}
+})
+
 
 const PageRouter: FC = observer(() => {
   const { pageRouter } = useStores()
@@ -135,6 +103,11 @@ export const LandingView: FC = () => {
 
   const handleDragDropInput = useCallback((e: React.DragEvent) => {
     e.preventDefault()
+    if (auth.currentUser === null) {
+      console.log("Accepting files only if signed in..");
+      return;
+    }
+
     if (e.dataTransfer){
       rootStore.loadExternalMidi(e.dataTransfer.files).then(r => console.log("File handled"))
     }
@@ -157,7 +130,7 @@ export const LandingView: FC = () => {
           <PageRouter />
         </Container>
         <Footer>
-          <UploadButton />
+          <UploadButtonSwitcher />
           <SpeakerButton />
         </Footer>
       </Page>
