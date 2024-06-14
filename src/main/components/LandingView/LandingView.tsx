@@ -21,7 +21,7 @@ import { observer } from "mobx-react-lite"
 import { auth } from "../../../firebase/firebase"
 import { PageLanding } from "./PageLanding"
 import { SignInToUpload } from "../Navigation/SignInToUpload"
-import { PagePayment } from "./PagePayment"
+import { PagePayment } from "./PagePayment/PagePayment"
 
 
 const Container = styled.div`
