@@ -30,3 +30,5 @@ FOR DEPLOY
     firebase deploy
 FOR ONLY FUNCTIONS
     firebase deploy --only functions
+
+firebase functions:config:set stripe.secret_key

@@ -12,22 +12,17 @@ import { usePrompt } from "../../../hooks/usePrompt"
 import { useLocalization } from "../../../../common/localize/useLocalization"
 import { useToast } from "../../../hooks/useToast"
 import { createSong } from "../../../actions/cloudSong"
-
-
-
-//
-// const onClickDownload = async (rootStore: RootStore) => {
-//   // await saveOrCreateSong()
-//   // close()
-//   saveSong(rootStore)()
-// }
+import { loadStripe } from "@stripe/stripe-js"
 
 export const PagePayment: FC = () => {
   const rootStore = useStores()
-  const { song } = rootStore
+  const { song, paymentHandler } = rootStore
   const prompt = usePrompt()
   const localized = useLocalization()
   const toast = useToast()
+  const stripePromise = loadStripe("pk_test_51PRePO2M0t6YOSnidFRanvy4y5YUlW2kFxgycXGlFfqcB8VGEwnCrTXyhjCeG47yMeKUulSXnkbXx5ckJ5EVhUmr00Y5MRFC9D")
+
+
 
   const saveOrCreateSong = async () => {
     if (song.name.length === 0) {
@@ -43,7 +38,18 @@ export const PagePayment: FC = () => {
     toast.success(localized("song-created", "Song created"))
   }
 
-  const onClickDownload = async () => {
+  const getCheckout = async () => {
+    const priceId = "price_1PRf762M0t6YOSni1MtUdSYO"
+    const sessionId = await paymentHandler.getStripeCheckout(priceId)
+    const stripe = await stripePromise
+    if (stripe)
+      stripe.redirectToCheckout({ sessionId })
+    else
+      throw new Error("Stripe encountered an issue.")
+  }
+
+  const onClickPurchase = async () => {
+    await getCheckout()
     await saveOrCreateSong()
     console.log("savecreate done")
     // close()
@@ -67,12 +73,12 @@ export const PagePayment: FC = () => {
         <Tab
           className="tick-midi"
           onMouseDown={useCallback(async () => {
-            await onClickDownload();
+            await onClickPurchase();
           }, [])}
         >
           <TickIcon style={IconStyle} />
           <TabTitle>
-            <Localized default="Proceed">proceed</Localized>
+            <Localized default="Purchase">purchase</Localized>
           </TabTitle>
         </Tab>
       </Tooltip>

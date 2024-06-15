@@ -6,6 +6,9 @@ import { Bytes } from "firebase/firestore"
 import * as functions from "firebase-functions"
 import { google } from "googleapis"
 import md5 from "md5"
+// const stripe = require('stripe')('rk_test_51PRePO2M0t6YOSniMee3JCZ9WzAr2Wycnhu5K5FMTFnL0ozF4uNJfDyyAEFHcq2JAvp1ThzCKrHMxRXvKVoWgEKL00r2S27pWY');
+const stripe = require('stripe')(functions.config().stripe.secret_key); // toDo: Replace with your Stripe secret key
+const cors = require('cors')({ origin: true });
 
 admin.initializeApp()
 
@@ -166,3 +169,33 @@ export const uploadMidiData = functions.https.onCall(async (data) => {
 function getNameFromURL(path: string) {
   return path.split("/").pop()
 }
+
+
+// @ts-ignore
+export const createStripeCheckoutv2 = functions.https.onRequest((req, res) => {
+  cors(req, res, async () => {
+    try {
+      console.log("Request body is: " + req.body)
+      const { priceId } = req.body;
+      console.log("Price ID received is :" + priceId)
+      const session = await stripe.checkout.sessions.create({
+        payment_method_types: ['card'],
+        line_items: [
+          {
+            price: priceId,
+            quantity: 1,
+          },
+        ],
+        mode: 'payment',
+        success_url: 'http://localhost:3000/',
+        cancel_url: 'http://localhost:3000/',
+      });
+      console.log("Session ID is: " + session.id)
+
+      res.json({data: { id: session.id }});
+    } catch (error) {
+      // @ts-ignore
+      res.status(500).send(error.message);
+    }
+  });
+});

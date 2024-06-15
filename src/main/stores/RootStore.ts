@@ -45,6 +45,7 @@ import { registerReactions } from "./reactions"
 import TopRouter from "./Routers/TopRouter"
 import { Bytes } from "firebase/firestore"
 import PageRouter from "./Routers/PageRouter"
+import { PaymentHandler } from "../../payment/PaymentHandler"
 
 // we use any for now. related: https://github.com/Microsoft/TypeScript/issues/1897
 type Json = any
@@ -78,6 +79,7 @@ export default class RootStore {
     functions,
   )
   readonly userRepository: IUserRepository = new UserRepository(firestore, auth)
+  readonly paymentHandler: PaymentHandler = new PaymentHandler(functions)
 
   readonly topRouter = new TopRouter()
   readonly midiRouter = new MidiRouter()
