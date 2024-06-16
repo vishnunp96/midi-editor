@@ -43,6 +43,8 @@
     "@ryohey/webgl-react": "^0.4.2",
     "@sentry/react": "^7.106.0",
     "@sentry/tracing": "^7.106.0",
+    "@stripe/react-stripe-js": "^2.7.1",
+    "@stripe/stripe-js": "^3.5.0",
     "@types/react": "^18.2.64",
     "color": "^4.2.3",
     "firebase": "^10.8.1",

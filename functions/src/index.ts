@@ -7,6 +7,9 @@ import * as functions from "firebase-functions"
 import { google } from "googleapis"
 import md5 from "md5"
 
+const stripe = require('stripe')(functions.config().stripe.secret_key);
+const endpointSecret = functions.config().stripe.webhook_secret;
+
 admin.initializeApp()
 
 export const storeMidiFile = functions.https.onCall(async (data) => {
@@ -166,3 +169,90 @@ export const uploadMidiData = functions.https.onCall(async (data) => {
 function getNameFromURL(path: string) {
   return path.split("/").pop()
 }
+
+
+export const createPaymentIntent = functions.https.onCall(async (data, context) => {
+  const priceId = data.priceId;
+  const userId = data.userId;
+  console.log("PriceId received: "+priceId+" and userId: " + userId)
+
+  const price = await stripe.prices.retrieve(priceId);
+  console.log("Price amount is "+price.unit_amount+" "+price.currency)
+
+  const paymentIntent = await stripe.paymentIntents.create({
+    amount: price.unit_amount, // Use the amount from the price object
+    currency: price.currency, // Use the currency from the price object
+    payment_method_types: ['card'],
+    metadata: {integration_check: 'accept_a_payment'}
+  });
+
+  console.log("Payment intent created. Current secret: "+paymentIntent.client_secret)
+
+  const intentCollection = admin.firestore().collection("paymentIntents")
+  const existingSecret = await intentCollection
+    .where("clientSecret", "==", paymentIntent.client_secret)
+    .limit(1)
+    .get()
+
+  if (!existingSecret.empty) {
+    return {
+      clientSecret: null
+    }
+  }
+
+  // Save to Firestore
+  const docRef = await intentCollection.add({
+    priceId: priceId,
+    userId: userId,
+    clientSecret: paymentIntent.client_secret,
+    createdAt: FieldValue.serverTimestamp(),
+    updatedAt: FieldValue.serverTimestamp(),
+    paymentReceived: false
+  })
+
+  return {
+    clientSecret: paymentIntent.client_secret,
+  };
+});
+
+// @ts-ignore
+export const handleStripeWebhook = functions.https.onRequest(async (req, res) => {
+  const sig = req.headers['stripe-signature'] as string;
+
+  let event;
+
+  try {
+    event = stripe.webhooks.constructEvent(req.rawBody, sig, endpointSecret);
+  } catch (err) {
+    console.error("Webhook signature verification failed due to some reason.");
+    if (err instanceof Error) {
+      console.error('Webhook signature verification failed.', err.message);
+      return res.status(400).send(`Webhook Error: ${err.message}`);
+    }
+  }
+
+  if (event.type === 'payment_intent.succeeded') {
+    const paymentIntent = event.data.object;
+    console.log('PaymentIntent was successful!', paymentIntent);
+
+    const intentCollection = admin.firestore().collection("paymentIntents")
+    const existingSecret = await intentCollection
+      .where("clientSecret", "==", paymentIntent.client_secret)
+      .limit(1)
+      .get()
+
+    if (existingSecret.empty) {
+      console.log("Could not find payment intent in DB, received client Secret: " + paymentIntent.client_secret);
+      res.status(500).json({ received: true });
+    }
+
+    const docRef = existingSecret.docs[0].ref;
+    await docRef.update({
+      paymentReceived: true,
+      updatedAt: FieldValue.serverTimestamp()
+    });
+    console.log("Payment intent updated in DB, received client Secret: " + paymentIntent.client_secret);
+  }
+
+  res.status(200).json({ received: true });
+});
