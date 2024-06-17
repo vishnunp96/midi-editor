@@ -11,8 +11,11 @@ import styled from "@emotion/styled"
 
 const stripePromise = loadStripe('pk_test_51PRePO2M0t6YOSnidFRanvy4y5YUlW2kFxgycXGlFfqcB8VGEwnCrTXyhjCeG47yMeKUulSXnkbXx5ckJ5EVhUmr00Y5MRFC9D');
 
+interface CardFormProps {
+  disabled: boolean;
+}
 
-const CardForm = styled.form`
+const CardForm = styled.form<CardFormProps>`
     width: 400px;
     padding: 20px;
     display: flex;
@@ -20,8 +23,21 @@ const CardForm = styled.form`
     flex-direction: column;
     background-color: #4d4d4d;
     border-radius: 10px;
-    box-shadow: 0 4px 10px 0 rgba(0,0,0,0.2);
+    box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.2);
     overflow: hidden;
+    position: relative;
+
+
+    &::after {
+        content: ${({ disabled }) => (disabled ? '""' : 'none')};
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 1;
+        background-color: rgba(0, 0, 0, 0.5);
+    }
 `
 
 const CustomerInput = styled.input`
@@ -40,7 +56,36 @@ const CardElementContainer = styled.div`
     box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.2);
 `
 
-const CheckoutForm: FC = () => {
+interface AppearingMessageProps {
+  delay?: number;
+  transition?: number;
+}
+
+const AppearingMessage = styled.div<AppearingMessageProps>`
+  opacity: 0;
+  //transition: opacity 0.5s ease-in-out;
+  //transition-delay: 1s;
+  transition: opacity ${({ transition = 0.5 }) => transition}s ease-in-out;
+  transition-delay: ${({ delay= 0 }) => delay}s;
+  &.visible {
+    opacity: 1;
+  }
+`;
+
+
+interface CheckoutFormProps {
+  reload: number;
+  onClickDownload: () => void;
+  setItemValue: React.Dispatch<React.SetStateAction< string >>;
+  setErrorMessage: React.Dispatch<React.SetStateAction< string | null >>;
+  setSuccess: React.Dispatch<React.SetStateAction< boolean >>;
+}
+
+const CheckoutForm: FC<CheckoutFormProps> = ({ reload,
+                                               onClickDownload,
+                                               setItemValue,
+                                               setErrorMessage,
+                                               setSuccess })  => {
   const stripe = useStripe();
   const elements = useElements();
   const { paymentHandler } = useStores();
@@ -48,22 +93,27 @@ const CheckoutForm: FC = () => {
     authStore: { authUser: user },
   } = useStores()
   const [clientSecret, setClientSecret] = useState('');
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [success, setSuccess] = useState(false);
-  const [name, setName] = useState('');
+  const [disablePay, setDisablePay] = useState(false);
+  const [name, setName] = useState(user?.displayName || '');
   const [email, setEmail] = useState('');
 
   useEffect(() => {
     console.log("Use effect being called.")
+    setDisablePay(false);
+    setClientSecret('');
+    setErrorMessage(null);
+    setSuccess(false);
+    setItemValue('');
     if (user?.uid) {
       // Call PaymentHandler to create Payment Intent on component mount
-      paymentHandler.getPaymentIntent('price_1PRf762M0t6YOSni1MtUdSYO', user?.uid).then((clientSecret) => {
+      paymentHandler.getPaymentIntent('price_1PRf762M0t6YOSni1MtUdSYO', user?.uid).then(({clientSecret, paymentAmount, paymentCurrency}) => {
         setClientSecret(clientSecret);
+        setItemValue("Payment Amount: " + (paymentAmount / 100.0).toFixed(2) + " " + paymentCurrency.toUpperCase())
       });
     } else {
       console.log("User not signed in.")
     }
-  }, []);
+  }, [reload]);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -72,6 +122,7 @@ const CheckoutForm: FC = () => {
       return;
     }
 
+    setDisablePay(true);
     const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
       payment_method: {
         card: elements.getElement(CardElement)!,
@@ -88,6 +139,7 @@ const CheckoutForm: FC = () => {
     } else if (paymentIntent && paymentIntent.status === 'succeeded') {
       console.log("Payment success")
       setSuccess(true);
+      onClickDownload();
     }
   };
 
@@ -115,13 +167,14 @@ const CheckoutForm: FC = () => {
   };
 
   return (
-    <CardForm onSubmit={handleSubmit}>
+    <CardForm onSubmit={handleSubmit} disabled={disablePay}>
       <CustomerInput
         type="text"
         placeholder="Name"
         value={name}
         onChange={(e) => setName(e.target.value)}
         required
+        disabled={disablePay}
       />
       <CustomerInput
         type="email"
@@ -129,13 +182,12 @@ const CheckoutForm: FC = () => {
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         required
+        disabled={disablePay}
       />
       <CardElementContainer>
         <CardElement options={cardStyle} />
       </CardElementContainer>
-      <button type="submit" disabled={!stripe || !clientSecret}>Pay</button>
-      {errorMessage && <div>{errorMessage}</div>}
-      {success && <div>Payment successful!</div>}
+      <button type="submit" disabled={!stripe || !clientSecret || disablePay}>Pay</button>
     </CardForm>
   );
 };
@@ -146,8 +198,15 @@ export const PagePayment: FC = () => {
   const prompt = usePrompt()
   const localized = useLocalization()
   const toast = useToast()
+  const [itemValue, setItemValue] = useState('');
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
+  const [reload, setReload] = useState(0);
 
-  const saveOrCreateSong = async () => {
+
+
+
+  const recordSong = async () => {
     if (song.name.length === 0) {
       const text = await prompt.show({
         title: localized("save-as", "Save as"),
@@ -162,20 +221,33 @@ export const PagePayment: FC = () => {
   };
 
   const onClickDownload = async () => {
-    await saveOrCreateSong();
+    await recordSong();
     console.log("savecreate done");
-    // close();
     saveSong(rootStore)();
   };
 
   return (
-    <div>
+    <>
       <h2>Payment Page</h2>
-      <div>
+      {<AppearingMessage className={itemValue ? 'visible' : ''}>
+        <h2>{itemValue}</h2>
+      </AppearingMessage>}
+      <AppearingMessage delay={0.5} className={itemValue ? 'visible' : ''}>
         <Elements stripe={stripePromise}>
-          <CheckoutForm />
+          <CheckoutForm reload={reload}
+                        onClickDownload={onClickDownload}
+                        setItemValue={setItemValue}
+                        setErrorMessage={setErrorMessage}
+                        setSuccess={setSuccess}/>
         </Elements>
-      </div>
-    </div>
+      </AppearingMessage>
+      <AppearingMessage className={errorMessage ? 'visible' : ''}>
+        <h2>{errorMessage}</h2>
+      </AppearingMessage>
+      <AppearingMessage className={success ? 'visible' : ''}>
+        <h2>{success && 'Payment successful!'}</h2>
+      </AppearingMessage>
+      {errorMessage && <button onClick={() => setReload(reload+1)}>Re-try Payment</button>}
+    </>
   );
 };

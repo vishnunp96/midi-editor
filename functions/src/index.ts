@@ -212,6 +212,8 @@ export const createPaymentIntent = functions.https.onCall(async (data, context) 
 
   return {
     clientSecret: paymentIntent.client_secret,
+    paymentAmount: paymentIntent.amount,
+    paymentCurrency: paymentIntent.currency,
   };
 });
 
