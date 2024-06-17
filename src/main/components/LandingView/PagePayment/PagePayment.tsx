@@ -229,10 +229,13 @@ export const PagePayment: FC = () => {
   return (
     <>
       <h2>Payment Page</h2>
-      {<AppearingMessage className={itemValue ? 'visible' : ''}>
+      <AppearingMessage transition={0.2} className={itemValue ? '' : 'visible'}>
+        <h2>Loading Portal...</h2>
+      </AppearingMessage>
+      <AppearingMessage delay={0.2} className={itemValue ? 'visible' : ''}>
         <h2>{itemValue}</h2>
-      </AppearingMessage>}
-      <AppearingMessage delay={0.5} className={itemValue ? 'visible' : ''}>
+      </AppearingMessage>
+      <AppearingMessage delay={0.7} className={itemValue ? 'visible' : ''}>
         <Elements stripe={stripePromise}>
           <CheckoutForm reload={reload}
                         onClickDownload={onClickDownload}

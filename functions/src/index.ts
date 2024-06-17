@@ -12,7 +12,7 @@ const endpointSecret = functions.config().stripe.webhook_secret;
 
 admin.initializeApp()
 
-export const storeMidiFile = functions.https.onCall(async (data) => {
+export const storeMidiFile = functions.region('europe-west2').https.onCall(async (data) => {
   const { midiFileUrl } = data
 
   try {
@@ -66,7 +66,7 @@ export const storeMidiFile = functions.https.onCall(async (data) => {
   }
 })
 
-export const disableApp = functions.pubsub
+export const disableApp = functions.region('europe-west2').pubsub
   .topic("budget-alert")
   .onPublish(async (m) => {
     const data = JSON.parse(Buffer.from(m.data, "base64").toString()) as {
@@ -94,7 +94,7 @@ export const disableApp = functions.pubsub
     return null
   })
 
-export const syncUserToSongs = functions.firestore
+export const syncUserToSongs = functions.region('europe-west2').firestore
   .document("users/{userId}")
   .onUpdate(async (change, context) => {
     const newValue = change.after.data()
@@ -117,7 +117,7 @@ export const syncUserToSongs = functions.firestore
 
 
 
-export const uploadMidiData = functions.https.onCall(async (data) => {
+export const uploadMidiData = functions.region('europe-west2').https.onCall(async (data) => {
   const { midiString, fileName } = data
   const midiData = Bytes.fromBase64String(midiString).toUint8Array()
   console.log("Receiving filename: "+ fileName)
@@ -171,7 +171,7 @@ function getNameFromURL(path: string) {
 }
 
 
-export const createPaymentIntent = functions.https.onCall(async (data, context) => {
+export const createPaymentIntent = functions.region('europe-west2').https.onCall(async (data, context) => {
   const priceId = data.priceId;
   const userId = data.userId;
   console.log("PriceId received: "+priceId+" and userId: " + userId)
@@ -218,7 +218,7 @@ export const createPaymentIntent = functions.https.onCall(async (data, context) 
 });
 
 // @ts-ignore
-export const handleStripeWebhook = functions.https.onRequest(async (req, res) => {
+export const handleStripeWebhook = functions.region('europe-west2').https.onRequest(async (req, res) => {
   const sig = req.headers['stripe-signature'] as string;
 
   let event;
@@ -257,4 +257,32 @@ export const handleStripeWebhook = functions.https.onRequest(async (req, res) =>
   }
 
   res.status(200).json({ received: true });
+});
+
+
+export const deleteOldIntents = functions.region('europe-west2').pubsub.schedule('0 0 * * *').onRun(async (context) => {
+  try {
+    // const oneDayAgo = admin.firestore.Timestamp.now().toMillis() - 24 * 60 * 60 * 1000;
+    const oneDayAgo = admin.firestore.Timestamp.fromMillis(admin.firestore.Timestamp.now().toMillis() - 24 * 60 * 60 * 1000);
+
+    const intentCollection = admin.firestore().collection('paymentIntents');
+    const oldIntents = await intentCollection
+      .where('createdAt', '<=', oneDayAgo)
+      .where('paymentReceived', '==', false)
+      .get();
+
+    console.log("Found "+oldIntents.docs.length+" old intents.");
+
+    const batch = admin.firestore().batch();
+
+    oldIntents.docs.forEach((doc) => {
+      batch.delete(doc.ref);
+    });
+
+    await batch.commit();
+
+    console.log(`Deleted ${oldIntents.docs.length} old intents.`);
+  } catch (err){
+    console.error('Error deleting old intents:', err);
+  }
 });
