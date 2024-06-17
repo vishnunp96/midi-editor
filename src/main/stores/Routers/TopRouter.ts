@@ -15,7 +15,7 @@ export default class TopRouter {
     this.path = "/edit"
   }
 
-  goToLanding() {
+  goHome() {
     this.path = "/home"
   }
 }

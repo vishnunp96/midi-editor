@@ -5,7 +5,7 @@ import RootStore from "../RootStore"
 export const resetRouters = (rootStore: RootStore) => {
   const {topRouter, midiRouter, pageRouter } = rootStore
   console.log("Going home..")
-  topRouter.goToLanding()
+  topRouter.goHome()
+  pageRouter.goToLanding()
   midiRouter.reset()
-  pageRouter.reset()
 }

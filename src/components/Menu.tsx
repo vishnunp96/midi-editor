@@ -21,6 +21,7 @@ const List = styled.ul`
   list-style: none;
   padding: 0;
   margin: 0;
+  min-width: 6rem;
 `
 
 export const Menu: FC<MenuProps> = ({

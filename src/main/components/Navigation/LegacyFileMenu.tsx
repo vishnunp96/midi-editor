@@ -12,9 +12,10 @@ const fileInputID = "OpenButtonInputFile"
 export const FileInput: FC<
   React.PropsWithChildren<{
     onChange: (e: ChangeEvent<HTMLInputElement>) => void
-    accept?: string
+    accept?: string,
+    disabled?: boolean
   }>
-> = ({ onChange, children, accept }) => (
+> = ({ onChange, children, accept, disabled }) => (
   <>
     <input
       accept={accept}
@@ -22,6 +23,7 @@ export const FileInput: FC<
       id={fileInputID}
       type="file"
       onChange={onChange}
+      disabled={disabled}
     />
     <label htmlFor={fileInputID}>{children}</label>
   </>
@@ -32,6 +34,7 @@ export const LegacyFileMenu: FC<{ close: () => void }> = observer(
     const rootStore = useStores()
     const toast = useToast()
     const localized = useLocalization()
+    const {authStore: { authUser: user }} = rootStore
 
     const onClickNew = () => {
       const { song } = rootStore
@@ -66,8 +69,8 @@ export const LegacyFileMenu: FC<{ close: () => void }> = observer(
 
         <MenuDivider />
 
-        <FileInput onChange={onClickOpen} accept="audio/midi">
-          <MenuItem>
+        <FileInput onChange={onClickOpen} accept="audio/midi" disabled={user === null}>
+          <MenuItem style={{ color: user===null ? 'grey' : 'inherit'}}>
             <Localized default="Open">open-song</Localized>
           </MenuItem>
         </FileInput>

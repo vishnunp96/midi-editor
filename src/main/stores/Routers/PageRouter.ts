@@ -11,11 +11,11 @@ export default class PageRouter {
     })
   }
 
-  pushPayment() {
+  goToPayment() {
     this.path = "/payment"
   }
 
-  reset() {
+  goToLanding() {
     this.path = "/landing"
   }
 }

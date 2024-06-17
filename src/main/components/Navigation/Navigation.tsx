@@ -12,6 +12,7 @@ import TickIcon from "../../images/icons/circled-tick.svg"
 import FavIcon from "../../images/icons/favicon.svg"
 import Logo from "../../images/logo-circle.svg"
 import { FileMenuButton } from "./FileMenuButton"
+import { resetRouters } from "../../stores/Routers/RouterFunctions"
 
 const BannerContainer = styled.div`
   background: ${({ theme }) => theme.themeColor};
@@ -84,13 +85,16 @@ export const IconStyle: CSSProperties = {
 }
 
 export const Navigation: FC = observer(() => {
+  const rootStore = useStores()
   const {
-    rootViewStore,
     authStore: { authUser: user },
-    midiRouter,
     topRouter,
     pageRouter
-  } = useStores()
+  } = rootStore
+
+  const resetRoute = () => {
+    resetRouters(rootStore)
+  }
 
   return (
     <Container>
@@ -105,10 +109,7 @@ export const Navigation: FC = observer(() => {
       >
         <Tab
           className="home-icon"
-          onMouseDown={useCallback(() => {
-            topRouter.path = "/home";
-            pageRouter.path = "/landing";
-          }, [])}
+          onMouseDown={resetRoute}
         >
           <FavIcon style={IconStyle} viewBox="0 0 512 512"/>
           <TabTitle>
@@ -119,104 +120,9 @@ export const Navigation: FC = observer(() => {
 
       <FileMenuButton />
 
-      {/*
-      <Tooltip
-        title={
-          <>
-            <Localized default="Switch Tab">switch-tab</Localized> [
-            {envString.cmdOrCtrl}+1]
-          </>
-        }
-        delayDuration={500}
-      >
-        <Tab
-          className={router.path === "/track" ? "active" : undefined}
-          onMouseDown={useCallback(() => (router.path = "/track"), [])}
-        >
-          <PianoIcon style={IconStyle} viewBox="0 0 128 128" />
-          <TabTitle>
-            <Localized default="Piano Roll">piano-roll</Localized>
-          </TabTitle>
-        </Tab>
-      </Tooltip>
-
-      <Tooltip
-        title={
-          <>
-            <Localized default="Switch Tab">switch-tab</Localized> [
-            {envString.cmdOrCtrl}+2]
-          </>
-        }
-        delayDuration={500}
-      >
-        <Tab
-          className={router.path === "/arrange" ? "active" : undefined}
-          onMouseDown={useCallback(() => (router.path = "/arrange"), [])}
-        >
-          <ArrangeIcon style={IconStyle} viewBox="0 0 128 128" />
-          <TabTitle>
-            <Localized default="Arrange">arrange</Localized>
-          </TabTitle>
-        </Tab>
-      </Tooltip>
-
-      <Tooltip
-        title={
-          <>
-            <Localized default="Switch Tab">switch-tab</Localized> [
-            {envString.cmdOrCtrl}+3]
-          </>
-        }
-        delayDuration={500}
-      >
-        <Tab
-          className={router.path === "/tempo" ? "active" : undefined}
-          onMouseDown={useCallback(() => (router.path = "/tempo"), [])}
-        >
-          <TempoIcon style={IconStyle} viewBox="0 0 128 128" />
-          <TabTitle>
-            <Localized default="Tempo">tempo</Localized>
-          </TabTitle>
-        </Tab>
-      </Tooltip>
-
-      */}
-
-
       <FlexibleSpacer />
 
-      {/*}
-      <Tab
-        onClick={useCallback(
-          () => (rootViewStore.openSettingDialog = true),
-          [],
-        )}
-      >
-        <Settings style={IconStyle} />
-        <TabTitle>
-          <Localized default="Settings">settings</Localized>
-        </TabTitle>
-      </Tab>
-
-      <Tab onClick={useCallback(() => (rootViewStore.openHelp = true), [])}>
-        <Help style={IconStyle} />
-        <TabTitle>
-          <Localized default="Help">help</Localized>
-        </TabTitle>
-      </Tab>
-
-      <Tab>
-        <Forum style={IconStyle} />
-        <TabTitle>
-          <a href="https://discord.gg/XQxzNdDJse" target="_blank">
-            Discord
-          </a>
-        </TabTitle>
-      </Tab>
-
-      <UserButton />
-      */}
-
+      { user !== null &&
       <Tooltip
         title={
           <>
@@ -227,17 +133,23 @@ export const Navigation: FC = observer(() => {
       >
         <Tab
           className="tick-midi"
-          onMouseDown={useCallback(() => {
-            topRouter.path = "/home";
-            pageRouter.path = "/payment";
-          }, [])}
+          onMouseDown={ () => {
+            topRouter.goHome()
+            pageRouter.goToPayment()
+          }
+
+          // useCallback(() => {
+          //   topRouter.goHome()
+          //   pageRouter.goToPayment()
+          // }, [])
+        }
         >
           <TickIcon style={IconStyle} />
           <TabTitle>
             <Localized default="Proceed">proceed</Localized>
           </TabTitle>
         </Tab>
-      </Tooltip>
+      </Tooltip> }
 
     </Container>
   )
