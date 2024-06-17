@@ -18,4 +18,8 @@ export default class MidiRouter {
   pushTrack() {
     this.path = `/track`
   }
+
+  reset() {
+    this.path = "/track"
+  }
 }

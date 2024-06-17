@@ -22,6 +22,7 @@ import { auth } from "../../../firebase/firebase"
 import { PageLanding } from "./PageLanding"
 import { SignInToUpload } from "../Navigation/SignInToUpload"
 import { PagePayment } from "./PagePayment/PagePayment"
+import { resetRouters } from "../../stores/Routers/RouterFunctions"
 
 
 const Container = styled.div`
@@ -73,6 +74,13 @@ const BackGround = styled.div`
     height: 100%;
 `
 
+const FooterElement = styled.div`
+    min-width: 5%;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+`
+
 
 const UploadButtonSwitcher: FC = observer(() => {
   const {
@@ -98,14 +106,14 @@ const PageRouter: FC = observer(() => {
   )
 })
 
-
 export const LandingView: FC = () => {
 
   const rootStore = useStores()
+  const { pageRouter, topRouter } = rootStore
 
   const handleDragDropInput = useCallback((e: React.DragEvent) => {
     e.preventDefault()
-    if (auth.currentUser === null) {
+    if (auth.currentUser === null || pageRouter.path == "/payment") {
       console.log("Accepting files only if signed in..");
       return;
     }
@@ -115,6 +123,9 @@ export const LandingView: FC = () => {
     }
   }, [rootStore])
 
+  const resetRoute = () => {
+    resetRouters(rootStore)
+  }
 
   return (
   <>
@@ -125,15 +136,20 @@ export const LandingView: FC = () => {
     >
       <Page>
         <Header>
-          <ImageLink href="/"><ImageBox src="favicon.svg" /></ImageLink>
-          <HamburgMenu />
+          <ImageLink onClick={resetRoute}><ImageBox src="favicon.svg" /></ImageLink>
+          {pageRouter.path !== "/payment" && <HamburgMenu />}
         </Header>
         <Container>
           <PageRouter />
         </Container>
         <Footer>
-          <UploadButtonSwitcher />
-          <SpeakerButton />
+          <FooterElement></FooterElement>
+          <FooterElement>
+            {pageRouter.path !== "/payment" && <UploadButtonSwitcher />}
+          </FooterElement>
+          <FooterElement>
+            <SpeakerButton />
+          </FooterElement>
         </Footer>
       </Page>
     </BackGround>

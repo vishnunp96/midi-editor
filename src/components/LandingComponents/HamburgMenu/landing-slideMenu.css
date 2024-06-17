@@ -12,8 +12,8 @@
     z-index: 1;
 }
 
-.sliding-menu > a {
-    margin: 1rem;
+.sliding-menu > p {
+    margin: 2rem 1rem;
     color: white;
     text-decoration: none;
 }

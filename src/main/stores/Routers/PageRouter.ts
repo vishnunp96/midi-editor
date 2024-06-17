@@ -14,4 +14,8 @@ export default class PageRouter {
   pushPayment() {
     this.path = "/payment"
   }
+
+  reset() {
+    this.path = "/landing"
+  }
 }

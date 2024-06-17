@@ -3,7 +3,6 @@ import { makeObservable, observable } from "mobx"
 export type RoutePath = "/home" | "/edit"
 
 export default class TopRouter {
-  //toDo: revert when done
   path: RoutePath = "/home"
 
   constructor() {
@@ -12,7 +11,11 @@ export default class TopRouter {
     })
   }
 
-  pushEdit() {
+  goToMidiEditor() {
     this.path = "/edit"
+  }
+
+  goToLanding() {
+    this.path = "/home"
   }
 }

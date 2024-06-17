@@ -11,19 +11,13 @@ import styled from "@emotion/styled"
 
 export const SignInToUpload: FC = observer(() => {
   const {
-    rootViewStore,
-    authStore: { authUser: user },
+    rootViewStore
   } = useStores()
 
   const onClickSignIn = () => (rootViewStore.openSignInDialog = true)
 
-  const theme = useTheme()
-  const ref = useRef<HTMLDivElement>(null)
-
   const ButtonArea = styled.div`
     position: relative;
-    width: 20%;
-    left: 40%;
     display: flex;
     flex-direction: row;
     justify-content: center;

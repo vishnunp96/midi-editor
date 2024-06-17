@@ -6,8 +6,6 @@ import { useStores } from "../../../main/hooks/useStores"
 
 const ButtonArea = styled.div`
     position: relative;
-    width: 20%;
-    left: 40%;
     display: flex;
     flex-direction: row;
     justify-content: center;
