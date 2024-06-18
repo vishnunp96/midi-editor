@@ -14,18 +14,9 @@ export interface CloudSong {
 }
 
 export interface ICloudSongRepository {
-  // get(id: string): Promise<CloudSong | null>
   create(data: {
     name: string;
     songDataId: string;
     clientSecret: string
   }): Promise<string>
-  // update(songId: string, data: Pick<CloudSong, "name">): Promise<void>
-  // delete(songId: string): Promise<void>
-  // publish(songId: string, user: User): Promise<void>
-  // unpublish(songId: string): Promise<void>
-  // incrementPlayCount(songId: string): Promise<void>
-  // getMySongs(): Promise<CloudSong[]>
-  // getPublicSongs(): Promise<CloudSong[]>
-  // getPublicSongsByUser(userId: string): Promise<CloudSong[]>
 }

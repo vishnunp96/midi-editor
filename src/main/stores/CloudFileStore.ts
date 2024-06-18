@@ -29,12 +29,6 @@ export class CloudFileStore {
     })
   }
 
-  // async load() {
-  //   this.isLoading = true
-  //   this._files = await this.cloudSongRepository.getMySongs()
-  //   this.isLoading = false
-  // }
-
   get files() {
     return orderBy(
       this._files,
@@ -54,15 +48,4 @@ export class CloudFileStore {
       this.sortAscending ? "asc" : "desc",
     )
   }
-
-  // async deleteSong(song: CloudSong) {
-  //   await this.cloudSongDataRepository.delete(song.songDataId)
-  //   await this.cloudSongRepository.delete(song.id)
-  //
-  //   if (this.rootStore.song.cloudSongId === song.id) {
-  //     this.rootStore.song.cloudSongId = null
-  //     this.rootStore.song.cloudSongDataId = null
-  //   }
-  //   await this.load()
-  // }
 }

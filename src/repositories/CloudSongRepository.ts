@@ -7,20 +7,11 @@ import {
   Timestamp,
   addDoc,
   collection,
-  deleteDoc,
   doc,
-  getDoc,
-  getDocs,
-  increment,
-  orderBy,
-  query,
   serverTimestamp,
-  updateDoc,
-  where,
 } from "firebase/firestore"
 import { songDataCollection } from "./CloudSongDataRepository"
 import { CloudSong, ICloudSongRepository } from "./ICloudSongRepository"
-import { User } from "./IUserRepository"
 import { FirestoreUser, convertUser } from "./UserRepository"
 import {
   paymentIntentCollection,
@@ -37,20 +28,6 @@ export class CloudSongRepository implements ICloudSongRepository {
   private get songCollection() {
     return songCollection(this.firestore)
   }
-
-  private songRef(id: string) {
-    return doc(this.songCollection, id)
-  }
-
-  // async get(id: string): Promise<CloudSong | null> {
-  //   const doc = await getDoc(this.songRef(id))
-  //
-  //   if (!doc.exists()) {
-  //     return null
-  //   }
-  //
-  //   return toSong(doc)
-  // }
 
   async create(data: {
     name: string;
@@ -77,86 +54,6 @@ export class CloudSongRepository implements ICloudSongRepository {
 
     return document.id
   }
-
-  // async update(songId: string, data: Pick<CloudSong, "name">): Promise<void> {
-  //   const ref = this.songRef(songId)
-  //
-  //   await updateDoc(ref, {
-  //     updatedAt: serverTimestamp(),
-  //     name: data.name,
-  //   })
-  // }
-
-  // async delete(songId: string): Promise<void> {
-  //   await deleteDoc(this.songRef(songId))
-  // }
-
-  // async publish(songId: string, user: User): Promise<void> {
-  //   const ref = this.songRef(songId)
-  //
-  //   await updateDoc(ref, {
-  //     isPublic: true,
-  //     publishedAt: serverTimestamp(),
-  //     user,
-  //   })
-  // }
-
-  // async unpublish(songId: string): Promise<void> {
-  //   const ref = this.songRef(songId)
-  //
-  //   await updateDoc(ref, {
-  //     isPublic: false,
-  //     publishedAt: null,
-  //   })
-  // }
-
-  // async getMySongs(): Promise<CloudSong[]> {
-  //   if (this.auth.currentUser === null) {
-  //     throw new Error("You must be logged in to get songs from the cloud")
-  //   }
-  //
-  //   const res = await getDocs(
-  //     query(
-  //       this.songCollection,
-  //       where("userId", "==", this.auth.currentUser.uid),
-  //       orderBy("updatedAt", "desc"),
-  //     ),
-  //   )
-  //
-  //   return res.docs.map(toSong)
-  // }
-
-  // async getPublicSongs(): Promise<CloudSong[]> {
-  //   // 'isPublic'がtrueで、'publishedAt'でソートされたクエリ
-  //   const publicSongsQuery = query(
-  //     this.songCollection,
-  //     where("isPublic", "==", true),
-  //     orderBy("publishedAt", "desc"),
-  //   )
-  //
-  //   const docs = await getDocs(publicSongsQuery)
-  //   return docs.docs.map(toSong)
-  // }
-
-  // async getPublicSongsByUser(userId: string): Promise<CloudSong[]> {
-  //   const publicSongsQuery = query(
-  //     this.songCollection,
-  //     where("isPublic", "==", true),
-  //     where("userId", "==", userId),
-  //     orderBy("publishedAt", "desc"),
-  //   )
-  //
-  //   const docs = await getDocs(publicSongsQuery)
-  //   return docs.docs.map(toSong)
-  // }
-
-  // async incrementPlayCount(songId: string): Promise<void> {
-  //   const ref = this.songRef(songId)
-  //
-  //   await updateDoc(ref, {
-  //     playCount: increment(1),
-  //   })
-  // }
 }
 
 interface FirestoreSong {
