@@ -85,11 +85,12 @@ const FooterElement = styled.div`
 const UploadButtonSwitcher: FC = observer(() => {
   const {
     authStore: { authUser: user },
+    pageRouter
   } = useStores()
 
   return (
     <>
-      { user === null ? <SignInToUpload/> : <UploadButton/>}
+      { pageRouter.path !== "/payment" && (user === null ? <SignInToUpload/> : <UploadButton/>)}
     </>
   )
 })
@@ -102,6 +103,15 @@ const PageRouter: FC = observer(() => {
     <>
       {path === "/landing" && <PageLanding />}
       {path === "/payment" && <PagePayment />}
+    </>
+  )
+})
+
+const HamburgSwitcher: FC = observer(() => {
+  const { pageRouter } = useStores()
+  return (
+    <>
+      {pageRouter.path !== "/payment" && <HamburgMenu />}
     </>
   )
 })
@@ -137,7 +147,7 @@ export const LandingView: FC = () => {
       <Page>
         <Header>
           <ImageLink onClick={resetRoute}><ImageBox src="favicon.svg" /></ImageLink>
-          {pageRouter.path !== "/payment" && <HamburgMenu />}
+          <HamburgSwitcher />
         </Header>
         <Container>
           <PageRouter />
@@ -145,7 +155,7 @@ export const LandingView: FC = () => {
         <Footer>
           <FooterElement></FooterElement>
           <FooterElement>
-            {pageRouter.path !== "/payment" && <UploadButtonSwitcher />}
+            <UploadButtonSwitcher />
           </FooterElement>
           <FooterElement>
             <SpeakerButton />

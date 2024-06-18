@@ -13,6 +13,10 @@ import FavIcon from "../../images/icons/favicon.svg"
 import Logo from "../../images/logo-circle.svg"
 import { FileMenuButton } from "./FileMenuButton"
 import { resetRouters } from "../../stores/Routers/RouterFunctions"
+import { createSong } from "../../actions/cloudSong"
+import Song from "../../../common/song"
+import { usePrompt } from "../../hooks/usePrompt"
+import { SignInToUpload } from "./SignInToUpload"
 
 const BannerContainer = styled.div`
   background: ${({ theme }) => theme.themeColor};
@@ -79,6 +83,9 @@ const FlexibleSpacer = styled.div`
   flex-grow: 1;
 `
 
+
+
+
 export const IconStyle: CSSProperties = {
   width: "1.5rem",
   height: "1.5rem",
@@ -89,8 +96,23 @@ export const Navigation: FC = observer(() => {
   const {
     authStore: { authUser: user },
     topRouter,
-    pageRouter
+    pageRouter,
+    song,
+    rootViewStore
   } = rootStore
+  const prompt = usePrompt()
+
+  const getSongName = async () => {
+    if (song.name.length === 0) {
+      const text = await prompt.show({
+        title: "Save as",
+      });
+      if (text !== null && text.length > 0) {
+        song.name = text;
+      }
+    }
+    console.log("Song name set as: ", song.name);
+  };
 
   const resetRoute = () => {
     resetRouters(rootStore)
@@ -122,7 +144,7 @@ export const Navigation: FC = observer(() => {
 
       <FlexibleSpacer />
 
-      { user !== null &&
+      { user !== null ?
       <Tooltip
         title={
           <>
@@ -133,15 +155,11 @@ export const Navigation: FC = observer(() => {
       >
         <Tab
           className="tick-midi"
-          onMouseDown={ () => {
+          onMouseDown={ async () => {
+            await getSongName()
             topRouter.goHome()
             pageRouter.goToPayment()
           }
-
-          // useCallback(() => {
-          //   topRouter.goHome()
-          //   pageRouter.goToPayment()
-          // }, [])
         }
         >
           <TickIcon style={IconStyle} />
@@ -149,7 +167,31 @@ export const Navigation: FC = observer(() => {
             <Localized default="Proceed">proceed</Localized>
           </TabTitle>
         </Tab>
-      </Tooltip> }
+      </Tooltip> :
+        <Tooltip
+          title={
+            <>
+              Sign in to purchase track
+            </>
+          }
+          delayDuration={500}
+        >
+          <Tab
+            className="sign-in"
+            onMouseDown={ async () => {
+              rootViewStore.openSignInDialog = true
+            }
+            }
+          >
+            <TickIcon style={IconStyle} />
+            <TabTitle>
+              Sign in to purchase track
+            </TabTitle>
+          </Tab>
+        </Tooltip>
+
+
+      }
 
     </Container>
   )

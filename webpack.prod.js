@@ -32,7 +32,7 @@ module.exports = merge(common, {
     sentryWebpackPlugin({
       authToken: process.env.SENTRY_AUTH_TOKEN,
       org: "codingcafe_jp",
-      project: "signal",
+      project: "TearWorks",
       release: process.env.VERCEL_GIT_COMMIT_SHA,
       include: "./dist",
       ignore: [

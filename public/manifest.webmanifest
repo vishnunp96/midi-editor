@@ -4,8 +4,8 @@
   "display": "standalone",
   "scope": "/edit",
   "start_url": "/edit",
-  "name": "signal",
-  "short_name": "signal",
+  "name": "tearworks",
+  "short_name": "tearworks",
   "icons": [
     {
       "src": "/icon-192x192.png",

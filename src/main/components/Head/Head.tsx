@@ -4,13 +4,15 @@ import { Helmet } from "react-helmet-async"
 import { useStores } from "../../hooks/useStores"
 
 export const Head: FC = observer(() => {
-  const { song } = useStores()
+  const { song,
+  topRouter } = useStores()
 
   return (
     <Helmet>
       <title>
-        {song.name.length === 0 ? "New song" : song.name}
-        {song.isSaved ? "" : " *"}
+        {topRouter.path !== "/edit" ? "TearWorks" : "" }
+        {topRouter.path === "/edit" ? song.name.length === 0 ? "New song" : song.name : ""}
+        {topRouter.path === "/edit" ? song.isSaved ? "" : " *" : ""}
       </title>
     </Helmet>
   )

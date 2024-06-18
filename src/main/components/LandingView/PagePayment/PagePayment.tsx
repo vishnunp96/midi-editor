@@ -1,8 +1,7 @@
 import React, { useEffect, useState, FC } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements, useStripe, useElements, CardElement } from '@stripe/react-stripe-js';
-import { useStores } from '../../../hooks/useStores'; // Adjust the import path as needed
-import { usePrompt } from "../../../hooks/usePrompt"
+import { useStores } from '../../../hooks/useStores';
 import { useLocalization } from "../../../../common/localize/useLocalization"
 import { useToast } from "../../../hooks/useToast"
 import { createSong } from "../../../actions/cloudSong"
@@ -139,7 +138,7 @@ const CheckoutForm: FC<CheckoutFormProps> = ({ reload,
     } else if (paymentIntent && paymentIntent.status === 'succeeded') {
       console.log("Payment success")
       setSuccess(true);
-      onClickDownload();
+      // onClickDownload();
     }
   };
 
@@ -195,7 +194,6 @@ const CheckoutForm: FC<CheckoutFormProps> = ({ reload,
 export const PagePayment: FC = () => {
   const rootStore = useStores()
   const { song, paymentHandler } = rootStore
-  const prompt = usePrompt()
   const localized = useLocalization()
   const toast = useToast()
   const [itemValue, setItemValue] = useState('');
@@ -207,14 +205,6 @@ export const PagePayment: FC = () => {
 
 
   const recordSong = async () => {
-    if (song.name.length === 0) {
-      const text = await prompt.show({
-        title: localized("save-as", "Save as"),
-      });
-      if (text !== null && text.length > 0) {
-        song.name = text;
-      }
-    }
     console.log("Current song name: ", song.name);
     await createSong(rootStore)(song);
     toast.success(localized("song-created", "Song created"));
@@ -225,6 +215,14 @@ export const PagePayment: FC = () => {
     console.log("savecreate done");
     saveSong(rootStore)();
   };
+
+
+  useEffect(() => {
+    console.log("Success variable changed: "+success)
+    if (success) {
+      onClickDownload();
+    }
+  }, [success]);
 
   return (
     <>
