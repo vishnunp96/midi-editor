@@ -65,7 +65,6 @@ export type InitializationPhase =
 
 export default class RootStore {
   song: Song = emptySong()
-  midiData: Uint8Array = new Uint8Array()
   initializationPhase: InitializationPhase = "initializing"
 
   readonly cloudSongRepository: ICloudSongRepository = new CloudSongRepository(

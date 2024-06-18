@@ -16,6 +16,8 @@ import { resetRouters } from "../../stores/Routers/RouterFunctions"
 import { createSong } from "../../actions/cloudSong"
 import Song from "../../../common/song"
 import { usePrompt } from "../../hooks/usePrompt"
+import AccountCircle from "mdi-react/AccountCircleIcon"
+
 import { SignInToUpload } from "./SignInToUpload"
 
 const BannerContainer = styled.div`
@@ -164,7 +166,7 @@ export const Navigation: FC = observer(() => {
         >
           <TickIcon style={IconStyle} />
           <TabTitle>
-            <Localized default="Proceed">proceed</Localized>
+            Purchase
           </TabTitle>
         </Tab>
       </Tooltip> :
@@ -183,7 +185,7 @@ export const Navigation: FC = observer(() => {
             }
             }
           >
-            <TickIcon style={IconStyle} />
+            <AccountCircle style={IconStyle} />
             <TabTitle>
               Sign in to purchase track
             </TabTitle>

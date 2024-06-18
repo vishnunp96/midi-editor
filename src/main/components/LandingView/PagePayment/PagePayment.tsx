@@ -7,6 +7,7 @@ import { useToast } from "../../../hooks/useToast"
 import { createSong } from "../../../actions/cloudSong"
 import { saveSong } from "../../../actions"
 import styled from "@emotion/styled"
+import { resetRouters } from "../../../stores/Routers/RouterFunctions"
 
 const stripePromise = loadStripe('pk_test_51PRePO2M0t6YOSnidFRanvy4y5YUlW2kFxgycXGlFfqcB8VGEwnCrTXyhjCeG47yMeKUulSXnkbXx5ckJ5EVhUmr00Y5MRFC9D');
 
@@ -216,11 +217,17 @@ export const PagePayment: FC = () => {
     saveSong(rootStore)();
   };
 
+  const resetRoute = () => {
+    resetRouters(rootStore)
+  }
 
   useEffect(() => {
     console.log("Success variable changed: "+success)
     if (success) {
       onClickDownload();
+      setTimeout(() => {
+        resetRoute()
+      }, 3000)
     }
   }, [success]);
 
