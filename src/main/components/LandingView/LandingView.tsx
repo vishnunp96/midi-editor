@@ -4,7 +4,6 @@ import { Head } from "../Head/Head"
 import { InitializeErrorDialog } from "../InitializeErrorDialog/InitializeErrorDialog"
 import { InitializeLoadingDialog } from "../LoadingDialog/InitializeLoadingDialog"
 import { OnBeforeUnload } from "../OnBeforeUnload/OnBeforeUnload"
-import { PublishDialog } from "../PublishDialog/PublishDialog"
 import { SignInDialog } from "../SignInDialog/SignInDialog"
 import background from "../../assets/landing-bg-wallpaper.jpg"
 import HamburgMenu from "../../../components/LandingComponents/HamburgMenu/HamburgMenu"
@@ -168,7 +167,6 @@ export const LandingView: FC = () => {
     <InitializeErrorDialog />
     <OnBeforeUnload />
     <InitializeLoadingDialog />
-    <PublishDialog />
   </>
   )
 }

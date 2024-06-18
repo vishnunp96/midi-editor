@@ -56,7 +56,6 @@ interface FirestoreMidi {
   data: Bytes
   createdAt: Timestamp
   updatedAt: Timestamp
-  paymentReceived: boolean
 }
 
 const midiConverter: FirestoreDataConverter<FirestoreMidi> = {

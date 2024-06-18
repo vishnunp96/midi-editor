@@ -1,5 +1,4 @@
 import { Functions, httpsCallable } from "firebase/functions"
-import { useEffect } from "react"
 
 interface PaymentIntentResponse {
   clientSecret: string
@@ -13,6 +12,9 @@ export class PaymentHandler {
   ) {}
 
   async getPaymentIntent(priceId: string, userId: string): Promise<PaymentIntentResponse> {
+    if ( priceId === "" || userId === "" ) {
+      throw new Error("Invalid priceId or userId")
+    }
     const createPaymentIntent = httpsCallable<
       { priceId: string,
         userId: string },

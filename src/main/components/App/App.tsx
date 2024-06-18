@@ -19,9 +19,6 @@ import { EmotionThemeProvider } from "../Theme/EmotionThemeProvider"
 import { GlobalCSS } from "../Theme/GlobalCSS"
 import { LocalizationProvider } from "./LocalizationProvider"
 import { observer } from "mobx-react-lite"
-import { PianoRollEditor } from "../PianoRoll/PianoRollEditor"
-import { TempoEditor } from "../TempoGraph/TempoEditor"
-import { ArrangeEditor } from "../ArrangeView/ArrangeEditor"
 
 Sentry.init({
   dsn: process.env.SENTRY_DSN,

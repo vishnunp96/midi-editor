@@ -53,8 +53,7 @@ export const storeMidiFile = functions.region('europe-west2').https.onCall(async
       name: midiName,
       hash: midiHash,
       createdAt: FieldValue.serverTimestamp(),
-      updatedAt: FieldValue.serverTimestamp(),
-      paymentReceived: false
+      updatedAt: FieldValue.serverTimestamp()
     })
     return { message: "MIDI file has been stored.", docId: docRef.id }
   } catch (error) {
@@ -152,8 +151,7 @@ export const uploadMidiData = functions.region('europe-west2').https.onCall(asyn
       name: fileName,
       hash: midiHash,
       createdAt: FieldValue.serverTimestamp(),
-      updatedAt: FieldValue.serverTimestamp(),
-      paymentReceived: false
+      updatedAt: FieldValue.serverTimestamp()
     })
     return { message: "MIDI file has been stored.", docId: docRef.id }
   } catch (error) {
@@ -284,5 +282,31 @@ export const deleteOldIntents = functions.region('europe-west2').pubsub.schedule
     console.log(`Deleted ${oldIntents.docs.length} old intents.`);
   } catch (err){
     console.error('Error deleting old intents:', err);
+  }
+});
+
+
+export const deleteOldMidis = functions.region('europe-west2').pubsub.schedule('0 0 * * *').onRun(async (context) => {
+  try {
+    const oneDayAgo = admin.firestore.Timestamp.fromMillis(admin.firestore.Timestamp.now().toMillis() - 24 * 60 * 60 * 1000);
+
+    const midiCollection = admin.firestore().collection('midis');
+    const oldMidis = await midiCollection
+      .where('createdAt', '<=', oneDayAgo)
+      .get();
+
+    console.log("Found "+oldMidis.docs.length+" old midis.");
+
+    const batch = admin.firestore().batch();
+
+    oldMidis.docs.forEach((doc) => {
+      batch.delete(doc.ref);
+    });
+
+    await batch.commit();
+
+    console.log(`Deleted ${oldMidis.docs.length} old midis.`);
+  } catch (err){
+    console.error('Error deleting old midis:', err);
   }
 });

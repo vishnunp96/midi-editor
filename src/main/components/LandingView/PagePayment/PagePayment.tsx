@@ -79,13 +79,15 @@ interface CheckoutFormProps {
   setItemValue: React.Dispatch<React.SetStateAction< string >>;
   setErrorMessage: React.Dispatch<React.SetStateAction< string | null >>;
   setSuccess: React.Dispatch<React.SetStateAction< boolean >>;
+  setCs: React.Dispatch<React.SetStateAction< string >>;
 }
 
 const CheckoutForm: FC<CheckoutFormProps> = ({ reload,
                                                onClickDownload,
                                                setItemValue,
                                                setErrorMessage,
-                                               setSuccess })  => {
+                                               setSuccess ,
+                                               setCs})  => {
   const stripe = useStripe();
   const elements = useElements();
   const { paymentHandler } = useStores();
@@ -139,7 +141,7 @@ const CheckoutForm: FC<CheckoutFormProps> = ({ reload,
     } else if (paymentIntent && paymentIntent.status === 'succeeded') {
       console.log("Payment success")
       setSuccess(true);
-      // onClickDownload();
+      setCs(clientSecret);
     }
   };
 
@@ -201,13 +203,16 @@ export const PagePayment: FC = () => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const [reload, setReload] = useState(0);
+  const [cs, setCs] = useState('');
 
 
 
 
   const recordSong = async () => {
     console.log("Current song name: ", song.name);
-    await createSong(rootStore)(song);
+    setTimeout(async () => {
+      await createSong(rootStore)(song, cs);
+    }, 2000)
     toast.success(localized("song-created", "Song created"));
   };
 
@@ -246,7 +251,8 @@ export const PagePayment: FC = () => {
                         onClickDownload={onClickDownload}
                         setItemValue={setItemValue}
                         setErrorMessage={setErrorMessage}
-                        setSuccess={setSuccess}/>
+                        setSuccess={setSuccess}
+                        setCs={setCs}/>
         </Elements>
       </AppearingMessage>
       <AppearingMessage className={errorMessage ? 'visible' : ''}>

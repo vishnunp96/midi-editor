@@ -46,6 +46,9 @@ import TopRouter from "./Routers/TopRouter"
 import { Bytes } from "firebase/firestore"
 import PageRouter from "./Routers/PageRouter"
 import { PaymentHandler } from "../../payment/PaymentHandler"
+import {
+  PaymentIntentRepository
+} from "../../repositories/PaymentIntentRepository"
 
 // we use any for now. related: https://github.com/Microsoft/TypeScript/issues/1897
 type Json = any
@@ -67,9 +70,11 @@ export default class RootStore {
   song: Song = emptySong()
   initializationPhase: InitializationPhase = "initializing"
 
+  readonly paymentIntentRepository: PaymentIntentRepository = new PaymentIntentRepository(firestore)
   readonly cloudSongRepository: ICloudSongRepository = new CloudSongRepository(
     firestore,
     auth,
+    this.paymentIntentRepository
   )
   readonly cloudSongDataRepository: ICloudSongDataRepository =
     new CloudSongDataRepository(firestore)

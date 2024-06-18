@@ -13,12 +13,9 @@ import FavIcon from "../../images/icons/favicon.svg"
 import Logo from "../../images/logo-circle.svg"
 import { FileMenuButton } from "./FileMenuButton"
 import { resetRouters } from "../../stores/Routers/RouterFunctions"
-import { createSong } from "../../actions/cloudSong"
-import Song from "../../../common/song"
 import { usePrompt } from "../../hooks/usePrompt"
 import AccountCircle from "mdi-react/AccountCircleIcon"
 
-import { SignInToUpload } from "./SignInToUpload"
 
 const BannerContainer = styled.div`
   background: ${({ theme }) => theme.themeColor};
